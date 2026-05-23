@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:47:37 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/23 16:04:58 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:05:51 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class CommandDispatcher
 		CommandDispatcher(const CommandDispatcher& src);
 		~CommandDispatcher();
 
-		//Overlode Operator
+		//Overload Operator
 		CommandDispatcher&	operator=(const CommandDispatcher& src);
 
 		//Functions

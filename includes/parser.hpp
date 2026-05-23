@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:45:56 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/20 19:21:26 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:06:21 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Parser
 		Parser(const Parser& src);
 		~Parser();
 
-		//Overlode Operator
+		//Overload Operator
 		Parser&			operator=(const Parser& src);
 
 		//Functions

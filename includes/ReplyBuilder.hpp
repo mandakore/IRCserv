@@ -6,14 +6,14 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:46:42 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/23 16:21:04 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:06:10 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #pragma once
 # include <string>
 
-class Client
+class Client;
 
 class ReplyBuilder
 {
@@ -23,7 +23,7 @@ class ReplyBuilder
 		ReplyBuilder(const ReplyBuilder& src);
 		~ReplyBuilder();
 
-		//Overlode Operator
+		//Overload Operator
 		ReplyBuilder&	operator=(const ReplyBuilder& src);
 
 		//Functions

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:20:15 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/17 18:30:25 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:05:45 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ class Client
 		Client(int socketFd);
 		~Client();
 
-		//Overlode Operator
+		//Overload Operator
 		Client&	operator=(const Client& src);
 
 		//Functions
