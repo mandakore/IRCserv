@@ -1,0 +1,23 @@
+BasedOnStyle: LLVM
+Language: Cpp
+
+IndentWidth: 4
+UseTab: Always
+TabWidth: 4
+
+BreakBeforeBraces: Attach
+AccessModifierOffset: -4
+
+ColumnLimit: 100
+
+PointerAlignment: Right
+ReferenceAlignment: Right
+
+SpaceBeforeParens: Always
+SpacesInParentheses: false
+SpaceInEmptyParentheses: false
+
+AllowShortFunctionsOnASingleLine: None
+AllowShortBlocksOnASingleLine: Never
+
+SortIncludes: false
