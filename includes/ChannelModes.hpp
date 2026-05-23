@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:55:50 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/17 19:24:26 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:05:32 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ class ChannelModes
 		ChannelModes(const ChannelModes& src);
 		~ChannelModes();
 
-		//Overlode Operator
+		//Overload Operator
 		ChannelModes&	operator=(const ChannelModes& src);
 
 		//Functions

@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:45:17 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/17 20:37:46 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:06:03 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ class Message
 				const std::vector<std::string>& params);
 		~Message();
 
-		//Overlode Operator
+		//Overload Operator
 		Message&						operator=(const Message& src);
 
 		//Functions
