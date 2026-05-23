@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:48:43 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/20 17:40:25 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:06:15 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ class ServerState
 		ServerState(const std::string& password);
 		~ServerState();
 
-		//Overlode Operator
+		//Overload Operator
 		ServerState&	operator=(const ServerState& src);
 
 		//Functions
