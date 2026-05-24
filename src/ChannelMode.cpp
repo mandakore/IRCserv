@@ -1,8 +1,8 @@
 #include "ChannelModes.hpp"
 
 ChannelModes::ChannelModes ()
-	: _inviteOnly (false), _topicRestricted (false), _memberLimited (false),
-	  _channelProtected (false), _maxMember (-1), _channelPass ("") {
+	: _inviteOnly (false), _topicRestricted (false), _channelProtected (false), _maxMember (-1),
+	  _channelPass ("") {
 }
 
 ChannelModes::ChannelModes (const ChannelModes &src) {
@@ -39,7 +39,7 @@ int ChannelModes::getMemberLimit () const {
 }
 
 bool ChannelModes::checkChannelPassword (const std::string &input) const {
-	if(input != _channelPass){
+	if (input != _channelPass) {
 		return false;
 	}
 	return true;
