@@ -30,18 +30,23 @@ class ChannelModes
 		bool			isTopicRestricted() const;
 		bool			isMemberLimited() const;
 		bool			isChannelProtected() const;
+
+
 		int				getMemberLimit() const;
 		bool			checkChannelPassword(const std::string& input) const;
 
-		//Setters&Unsetter
+		// Setters
 		void			setInviteOnly();
-		void			unsetInviteOnly();
 		void			setTopicRestricted();
-		void			unsetTopicRestricted();
 		void			setMemberLimit(int limit);
-		void			unsetMemberLimit();
 		void			setChannelProtected(const std::string& password);
+
+		// unset
+		void			unsetInviteOnly();
+		void			unsetTopicRestricted();
+		void			unsetMemberLimit();
 		void			unsetChannelProtected();
+
 	private :
 		bool			_inviteOnly;
 		bool			_topicRestricted;
