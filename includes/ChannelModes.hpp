@@ -50,7 +50,6 @@ class ChannelModes
 	private :
 		bool			_inviteOnly;
 		bool			_topicRestricted;
-		bool			_memberLimited;
 		bool			_channelProtected;
 		int				_maxMember;
 		std::string		_channelPass;
