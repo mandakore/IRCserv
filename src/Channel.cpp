@@ -1,5 +1,4 @@
 #include "Channel.hpp"
-#include <algorithm>
 
 Channel::Channel () {
 }
@@ -101,13 +100,13 @@ bool Channel::removeClient (Client *target) {
 
 // Util Functions
 bool Channel::isChannelMember (Client *target) const {
-	return find (_members.begin (), _members.end (), target) != _members.end ();
+	return _members.find (target) != _members.end ();
 }
 
 bool Channel::isOperator (Client *target) const {
-	return find (_members.begin (), _members.end (), target) != _members.end ();
+	return _operators.find (target) != _members.end ();
 }
 
 bool Channel::isInvitedMember (Client *target) const {
-	return find (_members.begin (), _members.end (), target) != _members.end ();
+	return _invited.find (target) != _members.end ();
 }
