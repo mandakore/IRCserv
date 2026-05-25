@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/16 21:33:40 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/17 16:22:09 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/23 19:05:58 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ class CommandResult
 		CommandResult(const CommandResult& src);
 		~CommandResult();
 
-		//Overlode Operator
+		//Overload Operator
 		CommandResult&				operator=(const CommandResult& src);
 
 		//Functions
-		void						addreply(int fd, const std::string& reply);
+		void						addReply(int fd, const std::string& reply);
 		const std::vector<t_reply>&	getReplies() const;
 		void						requestToDisconnect();
 		bool						shouldDisconnect() const;
