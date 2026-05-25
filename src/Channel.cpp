@@ -101,13 +101,13 @@ bool Channel::removeClient (Client *target) {
 
 // Util Functions
 bool Channel::isChannelMember (Client *target) const {
-	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+	return find (_members.begin (), _members.end (), target) != _members.end ();
 }
 
 bool Channel::isOperator (Client *target) const {
-	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+	return find (_members.begin (), _members.end (), target) != _members.end ();
 }
 
 bool Channel::isInvitedMember (Client *target) const {
-	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+	return find (_members.begin (), _members.end (), target) != _members.end ();
 }
