@@ -33,7 +33,7 @@ test: all
 	@./$(NAME) $(TEST_PORT) $(TEST_PASS) > server.log 2>&1 & echo $$! > server.pid
 	@sleep 1
 	@echo "Running Python tests..."
-	@python3 tests/test_network.py || (kill `cat server.pid` && rm server.pid && exit 1)
+	@python3 IRCservTester/test.py || (kill `cat server.pid` && rm server.pid && exit 1)
 	@echo "Stopping server..."
 	@kill `cat server.pid` && rm server.pid
 	@echo "All tests passed successfully!"
