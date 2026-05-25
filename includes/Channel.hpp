@@ -35,7 +35,7 @@ class Channel
 		//Getter
 		const std::string&		getChannelName() const;
 		const std::string&		getChannelTopic() const;
-		std::vector<Client*>	getMembers() const;
+		std::set<Client*>		getMembers() const;
 		size_t					getMemberCount() const;
 		const ChannelModes&		getModes() const;
 		ChannelModes&			getModes();

@@ -1,0 +1,113 @@
+#include "Channel.hpp"
+#include <algorithm>
+
+Channel::Channel () {
+}
+
+Channel::Channel (const Channel &src)
+	: _name (src._name), _members (src._members), _operators (src._operators),
+	  _invited (src._invited), _topic (src._topic), _modes (src._modes) {
+}
+
+Channel::Channel (const std::string &name) : _name (name), _topic ("") {
+}
+
+Channel::~Channel () {
+}
+
+Channel &Channel::operator= (const Channel &other) {
+	if (this != &other) {
+		_name = other._name;
+		_topic = other._topic;
+		_members = other._members;
+		_operators = other._operators;
+		_invited = other._invited;
+		_modes = other._modes;
+	}
+	return *this;
+}
+
+const std::string &Channel::getChannelName () const {
+	return _name;
+}
+
+const std::string &Channel::getChannelTopic () const {
+	return _topic;
+}
+
+std::set<Client *> Channel::getMembers () const {
+	return _members;
+}
+
+size_t Channel::getMemberCount () const {
+	return _members.size ();
+}
+
+const ChannelModes &Channel::getModes () const {
+	return _modes;
+}
+
+ChannelModes &Channel::getModes () {
+	return _modes;
+}
+
+// Setter
+void Channel::setChannelTopic (const std::string &topic) {
+	_topic = topic;
+}
+
+bool Channel::addMember (Client *target) {
+	if (!isChannelMember (target)) {
+		_members.insert (target);
+		return true;
+	}
+	return false;
+}
+
+bool Channel::addOperator (Client *target) {
+	if (isOperator (target)) {
+		_operators.insert (target);
+		return true;
+	}
+	return false;
+}
+
+bool Channel::addInvitedMember (Client *target) {
+	if (isInvitedMember (target)) {
+		_invited.insert (target);
+		return true;
+	}
+	return false;
+}
+
+// Remover
+bool Channel::removeMember (Client *target) {
+	_members.erase (std::remove (_members.begin (), _members.end (), target), _members.end ());
+}
+
+bool Channel::removeOperator (Client *target) {
+	_members.erase (std::remove (_operators.begin (), _operators.end (), target), _members.end ());
+}
+
+bool Channel::removeInvitedMember (Client *target) {
+	_members.erase (std::remove (_invited.begin (), _invited.end (), target), _members.end ());
+}
+
+bool Channel::removeClient (Client *target) {
+	removeMember (target);
+	removeOperator (target);
+	removeInvitedMember (target);
+}
+
+// Util Functions
+bool Channel::isChannelMember (Client *target) const {
+	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+}
+
+bool Channel::isOperator (Client *target) const {
+	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+}
+
+bool Channel::isInvitedMember (Client *target) const {
+	return std::find (_members.begin (), _members.end (), target) != _members.end ();
+}
