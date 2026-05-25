@@ -29,33 +29,33 @@ class Channel
 		~Channel();
 
 		//Overload Operator
-		Channel&				operator=(const Channel& src);
+		Channel&					operator=(const Channel& src);
 
 		//Functions
 		//Getter
-		const std::string&		getChannelName() const;
-		const std::string&		getChannelTopic() const;
-		std::vector<Client*>	getMembers() const;
-		size_t					getMemberCount() const;
-		const ChannelModes&		getModes() const;
-		ChannelModes&			getModes();
+		const std::string&			getChannelName() const;
+		const std::string&			getChannelTopic() const;
+		const std::set<Client*>&	getMembers() const;
+		size_t						getMemberCount() const;
+		const ChannelModes&			getModes() const;
+		ChannelModes&				getModes();
 
 		//Setter
-		void					setChannelTopic(const std::string& topic);
-		bool					addMember(Client* target);
-		bool					addOperator(Client* target);
-		bool					addInvitedMember(Client* target);
+		void						setChannelTopic(const std::string& topic);
+		bool						addMember(Client* target);
+		bool						addOperator(Client* target);
+		bool						addInvitedMember(Client* target);
 
 		//Remover
-		bool					removeMember(Client* target);
-		bool					removeOperator(Client* target);
-		bool					removeInvitedMember(Client* target);
-		bool					removeClient(Client* target);
+		bool						removeMember(Client* target);
+		bool						removeOperator(Client* target);
+		bool						removeInvitedMember(Client* target);
+		bool						removeClient(Client* target);
 
 		//Util Functions
-		bool					isChannelMember(Client* target) const;
-		bool					isOperator(Client* target) const;
-		bool					isInvitedMember(Client* target) const;
+		bool						isChannelMember(Client* target) const;
+		bool						isOperator(Client* target) const;
+		bool						isInvitedMember(Client* target) const;
 
 	private :
 		std::string			_name;
