@@ -35,7 +35,7 @@ const std::string &Channel::getChannelTopic () const {
 	return _topic;
 }
 
-std::set<Client *> Channel::getMembers () const {
+const std::set<Client *> &Channel::getMembers () const {
 	return _members;
 }
 
@@ -82,15 +82,15 @@ bool Channel::addInvitedMember (Client *target) {
 
 // Remover
 bool Channel::removeMember (Client *target) {
-	_members.erase (std::remove (_members.begin (), _members.end (), target), _members.end ());
+	return (_members.erase (target) > 0);
 }
 
 bool Channel::removeOperator (Client *target) {
-	_members.erase (std::remove (_operators.begin (), _operators.end (), target), _members.end ());
+	return (_operators.erase (target) > 0);
 }
 
 bool Channel::removeInvitedMember (Client *target) {
-	_members.erase (std::remove (_invited.begin (), _invited.end (), target), _members.end ());
+	return (_invited.erase (target) > 0);
 }
 
 bool Channel::removeClient (Client *target) {
