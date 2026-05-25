@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/24 14:48:23 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/24 17:28:19 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/25 21:02:05 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,15 @@ ServerState::ServerState(const std::string& password)
 
 ServerState::~ServerState()
 {
+	this->_clientsByNick.clear();
+	for (std::map<std::string, Channel*>::iterator itCh = _channels.begin();
+			itCh != _channels.end(); ++itCh)
+		delete itCh->second;
+	this->_channels.clear();
+	for (std::map<int, Client*>::iterator itCl = _clientsByFd.begin();
+			itCl != _clientsByFd.end(); ++itCl)
+		delete itCl->second;
+	this->_clientsByFd.clear();
 }
 
 bool		ServerState::addNewClient(int socketFd)
