@@ -38,4 +38,4 @@ test: all
 	@kill `cat server.pid` && rm server.pid
 	@echo "All tests passed successfully!"
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re test
