@@ -6,7 +6,7 @@
 /*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/05/27 12:16:25 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/27 14:16:02 by sohyamaz         ###   ########.fr       */
+/*   Updated: 2026/05/27 14:39:52 by sohyamaz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ int	main()
 	expect(state.updateNickname(*socket20, "TOYAMAGU") == true, "Unique nick is OK");
 	Channel*	ch1 = state.ensureChannel("2ch");
 	Channel*	ch2 = state.ensureChannel("2ch");
-	expect(ch1 = ch2, "same channelname will not create");
+	expect(ch1 == ch2, "same channelname will not create");
 	ch1->addMember(socket10);
 	expect(state.removeChannelIfEmpty("2ch") == false, "Do not remove non-Empty channel");
 	ch1->addOperator(socket10);
