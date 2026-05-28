@@ -93,9 +93,9 @@ bool Channel::removeInvitedMember (Client *target) {
 }
 
 bool Channel::removeClient (Client *target) {
-	removeMember (target);
-	removeOperator (target);
-	removeInvitedMember (target);
+	if (!removeMember (target) || !removeOperator (target) || !removeInvitedMember (target))
+		return false;
+	return true;
 }
 
 // Util Functions

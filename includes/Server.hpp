@@ -35,7 +35,7 @@ private:
 	void disconnectClient (int clientFd);
 
 	void processMessage (int clientFd, const std::string &message); // parse担当に渡すもの
-	void queueResponse(int clientFd, const std::string& message);
+	void queueResponse (int clientFd, const std::string &message);
 
 public:
 	Server (int port, std::string &password);

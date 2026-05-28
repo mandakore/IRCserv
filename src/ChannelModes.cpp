@@ -5,7 +5,10 @@ ChannelModes::ChannelModes ()
 	  _channelPass ("") {
 }
 
-ChannelModes::ChannelModes (const ChannelModes &src) {
+ChannelModes::ChannelModes (const ChannelModes &src)
+	: _inviteOnly (src._inviteOnly), _topicRestricted (src._topicRestricted),
+	  _channelProtected (src._channelProtected), _maxMember (src._maxMember),
+	  _channelPass (src._channelPass) {
 }
 
 ChannelModes::~ChannelModes () {
@@ -60,6 +63,7 @@ void ChannelModes::setMemberLimit (int limit) {
 
 void ChannelModes::setChannelProtected (const std::string &password) {
 	_channelProtected = true;
+	_channelPass = password;
 }
 
 // unset
@@ -77,4 +81,5 @@ void ChannelModes::unsetMemberLimit () {
 
 void ChannelModes::unsetChannelProtected () {
 	_channelProtected = false;
+	_channelPass.clear ();
 }
