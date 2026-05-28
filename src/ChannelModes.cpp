@@ -6,8 +6,9 @@ ChannelModes::ChannelModes ()
 }
 
 ChannelModes::ChannelModes (const ChannelModes &src)
-	: _inviteOnly(src._inviteOnly), _topicRestricted(src._topicRestricted), _channelProtected(src._channelProtected), _maxMember(src._maxMember), _channelPass(src._channelPass)
-{
+	: _inviteOnly (src._inviteOnly), _topicRestricted (src._topicRestricted),
+	  _channelProtected (src._channelProtected), _maxMember (src._maxMember),
+	  _channelPass (src._channelPass) {
 }
 
 ChannelModes::~ChannelModes () {
@@ -80,5 +81,5 @@ void ChannelModes::unsetMemberLimit () {
 
 void ChannelModes::unsetChannelProtected () {
 	_channelProtected = false;
-	_channelPass.clear();
+	_channelPass.clear ();
 }
