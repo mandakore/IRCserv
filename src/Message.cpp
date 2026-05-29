@@ -23,7 +23,11 @@ size_t Message::getParamCount () const {
 }
 
 const std::string &Message::getSingleParam (size_t index) const {
-	return _params[index];
+	static const std::string outOfRange = "";
+	if (!this->hasParam (index))
+		return outOfRange;
+	else
+		return _params[index];
 }
 
 bool Message::hasParam (size_t index) const {
