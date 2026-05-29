@@ -22,13 +22,15 @@ int main () {
 	parameters.push_back (p4);
 	Message test (cmd, parameters);
 	expect (test.getCommand () == cmd, "testing getCommand");
-	const std::vector<std::string> &getResult = test.getParams ();
-	expect (test.getParamCount () == parameters.size (), "testing getParams");
-	expect (test.getParamCount () == getResult.size (), "testing getParamCount");
+	const std::vector<std::string> &strVector = test.getParams ();
+	expect (test.getParamCount () == parameters.size (), "testing getParamCount");
+	expect (test.getParamCount () == strVector.size (), "testing getParams");
 	for (size_t i = 0; i < parameters.size (); ++i) {
-		expect (test.getSingleParam (i) == getResult[i], "testing getParams");
+		expect (test.getSingleParam (i) == strVector[i], "testing getSingleParam");
 		expect (test.getSingleParam (i) == parameters[i], "testing getSingleParam");
 	}
-	expect (test.hasParam (10) == false, "testing hasParam");
+	expect (test.hasParam (10) == false, "testing hasParam NegativeCase");
+	expect (test.hasParam (2) == true, "testing hasParam PositiveCase");
+	expect (test.hasParam (parameters.size()) == false, "testing hasParam Border Case");
 	return 0;
 }
