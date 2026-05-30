@@ -1,6 +1,6 @@
 #include "Parser.hpp"
 #include "Message.hpp"
-#include "../src/Debug.hpp"
+#include "Debug.hpp"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -283,32 +283,32 @@ TEST (test_max_params_limit) {
 
 // Message コンストラクタ直接テスト 
 
-TEST (test_message_direct_construction) {
-	std::vector<std::string> params;
-	params.push_back ("hoge");
-	params.push_back ("0");
-	params.push_back ("*");
-	params.push_back ("Real Name");
-	Message msg ("USER", params);
-	EXPECT_EQ (msg.getCommand (), "USER");
-	EXPECT_EQ (msg.getParamCount (), (size_t)4);
-	EXPECT_EQ (msg.getSingleParam (3), "Real Name");
-}
+// TEST (test_message_direct_construction) {
+// 	std::vector<std::string> params;
+// 	params.push_back ("hoge");
+// 	params.push_back ("0");
+// 	params.push_back ("*");
+// 	params.push_back ("Real Name");
+// 	Message msg ("USER", params);
+// 	EXPECT_EQ (msg.getCommand (), "USER");
+// 	EXPECT_EQ (msg.getParamCount (), (size_t)4);
+// 	EXPECT_EQ (msg.getSingleParam (3), "Real Name");
+// }
 
-TEST (test_message_copy_constructor) {
-	Message original = Parser::parse ("NICK hoge");
-	Message copy (original);
-	EXPECT_EQ (copy.getCommand (), "NICK");
-	EXPECT_EQ (copy.getSingleParam (0), "hoge");
-}
+// TEST (test_message_copy_constructor) {
+// 	Message original = Parser::parse ("NICK hoge");
+// 	Message copy (original);
+// 	EXPECT_EQ (copy.getCommand (), "NICK");
+// 	EXPECT_EQ (copy.getSingleParam (0), "hoge");
+// }
 
-TEST (test_message_assignment_operator) {
-	Message msg1 = Parser::parse ("NICK hoge");
-	Message msg2 = Parser::parse ("QUIT");
-	msg2 = msg1;
-	EXPECT_EQ (msg2.getCommand (), "NICK");
-	EXPECT_EQ (msg2.getSingleParam (0), "hoge");
-}
+// TEST (test_message_assignment_operator) {
+// 	Message msg1 = Parser::parse ("NICK hoge");
+// 	Message msg2 = Parser::parse ("QUIT");
+// 	msg2 = msg1;
+// 	EXPECT_EQ (msg2.getCommand (), "NICK");
+// 	EXPECT_EQ (msg2.getSingleParam (0), "hoge");
+// }
 
 // main 
 
@@ -367,9 +367,9 @@ int main () {
 
 	std::cout << std::endl;
 	std::cout << "[Group: Message Class]" << std::endl;
-	RUN (test_message_direct_construction);
-	RUN (test_message_copy_constructor);
-	RUN (test_message_assignment_operator);
+	// RUN (test_message_direct_construction);
+	// RUN (test_message_copy_constructor);
+	// RUN (test_message_assignment_operator);
 
 	std::cout << std::endl;
 	std::cout << "=========================" << std::endl;

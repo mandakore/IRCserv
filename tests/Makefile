@@ -9,7 +9,7 @@ SRCS		= $(SRCS_DIR)main.cpp \
 			  $(SRCS_DIR)Message.cpp \
 			  $(SRCS_DIR)Parser.cpp \
 			  $(SRCS_DIR)Channel.cpp \
-			  $(SRCS_DIR)ChannelMode.cpp \
+			  $(SRCS_DIR)ChannelModes.cpp \
 			  $(SRCS_DIR)Client.cpp
 
 OBJS		= $(SRCS:.cpp=.o)
