@@ -58,7 +58,7 @@ Message Parser::parse (const std::string &line) {
 	if (command.empty ())
 		return Message ("", std::vector<std::string> ());
 
-		std::vector<std::string> params;
+	std::vector<std::string> params;
 
 	while (pos < len && static_cast<int> (params.size ()) < MAX_PARAMS) {
 		while (pos < len && line[pos] == ' ')
