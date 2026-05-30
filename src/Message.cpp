@@ -1,8 +1,5 @@
 #include "Message.hpp"
 
-Message::Message () : _command (""), _params () {
-}
-
 Message::Message (const Message &src) : _command (src._command), _params (src._params) {
 }
 
@@ -11,14 +8,6 @@ Message::Message (const std::string &command, const std::vector<std::string> &pa
 }
 
 Message::~Message () {
-}
-
-Message &Message::operator= (const Message &src) {
-	if (this != &src) {
-		_command = src._command;
-		_params = src._params;
-	}
-	return *this;
 }
 
 const std::string &Message::getCommand () const {
@@ -33,15 +22,13 @@ size_t Message::getParamCount () const {
 	return _params.size ();
 }
 
-bool Message::hasParam (size_t index) const {
-	return index < _params.size ();
+const std::string &Message::getSingleParam (size_t index) const {
+	return _params[index];
 }
 
-//  範囲外はから文字の参照
-// 空文字列はstatic(UB)
-const std::string &Message::getSingleParam (size_t index) const {
-	static const std::string empty ("");
-	if (index >= _params.size ())
-		return empty;
-	return _params[index];
+bool Message::hasParam (size_t index) const {
+	if (index < _params.size ())
+		return true;
+	else
+		return false;
 }

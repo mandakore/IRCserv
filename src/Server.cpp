@@ -149,7 +149,7 @@ void Server::ircLoop () {
 			if (!disconnected && clientFd != _serverFd) {
 				++i;
 			} else if (clientFd == _serverFd) {
-				++i; 
+				++i;
 			}
 		}
 	}

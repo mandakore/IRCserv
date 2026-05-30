@@ -81,4 +81,5 @@ void ChannelModes::unsetMemberLimit () {
 
 void ChannelModes::unsetChannelProtected () {
 	_channelProtected = false;
+	_channelPass.clear ();
 }

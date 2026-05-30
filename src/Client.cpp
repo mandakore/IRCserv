@@ -1,108 +1,81 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Client.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: sohyamaz <sohyamaz@student.42tokyo.jp>     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2026/05/23 19:45:12 by sohyamaz          #+#    #+#             */
-/*   Updated: 2026/05/24 14:16:15 by sohyamaz         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Client.hpp"
 
-
-Client::Client(int socketFd)
-	: _socketFd(socketFd), _username(""), _nickname(""), _realname(""),
-	  _passAccepted(false), _registered(false)
-{
+Client::Client (int socketFd)
+	: _socketFd (socketFd), _username (""), _nickname (""), _realname (""), _passAccepted (false),
+	  _registered (false) {
 }
 
-Client::~Client()
-{
+Client::~Client () {
 }
 
-int					Client::getSocketFd() const
-{
+int Client::getSocketFd () const {
 	return this->_socketFd;
 }
 
-bool				Client::isPassAccepted() const
-{
+bool Client::isPassAccepted () const {
 	return this->_passAccepted;
 }
 
-void				Client::acceptPassword()
-{
+void Client::acceptPassword () {
 	this->_passAccepted = true;
-	return ;
+	return;
 }
 
-const std::string&	Client::getUserName() const
-{
+const std::string &Client::getUserName () const {
 	return this->_username;
 }
 
-void				Client::setUserName(const std::string& name)
-{
+void Client::setUserName (const std::string &name) {
 	this->_username = name;
-	return ;
+	return;
 }
 
-const std::string&	Client::getNickName() const
-{
+const std::string &Client::getNickName () const {
 	return this->_nickname;
 }
 
-void				Client::setNickByServerState(const std::string& name)
-{
+void Client::setNickByServerState (const std::string &name) {
 	this->_nickname = name;
-	return ;
+	return;
 }
 
-bool				Client::isRegistered() const
-{
+bool Client::isRegistered () const {
 	return this->_registered;
 }
 
-bool				Client::tryRegister()
-{
-	if (isRegistered())
+bool Client::tryRegister () {
+	if (isRegistered ())
 		return true;
-	if (!this->isPassAccepted() || this->_username == "" || this->_nickname == "")
+	if (!this->isPassAccepted () || this->_username == "" || this->_nickname == "")
 		return false;
-	this->setAsRegistered();
+	this->setAsRegistered ();
 	return true;
 }
 
-const std::string&	Client::getRealName() const
-{
+const std::string &Client::getRealName () const {
 	return this->_realname;
 }
 
-void				Client::setRealName(const std::string& name)
-{
+void Client::setRealName (const std::string &name) {
 	this->_realname = name;
-	return ;
+	return;
 }
 
-void				Client::setAsRegistered()
-{
+void Client::setAsRegistered () {
 	this->_registered = true;
-	return ;
+	return;
 }
-//Forbidden OCF Functions
+// Forbidden OCF Functions
 //
-//Client::Client()
+// Client::Client()
 //{
-//}
+// }
 //
-//Client::Client(const Client& src)
+// Client::Client(const Client& src)
 //{
-//}
+// }
 //
-//Client&				Client::operator=(const Client& src)
+// Client&				Client::operator=(const Client& src)
 //{
 //	this->_socketFd = src._socketFd;
 //	this->_username = src._username;
@@ -111,4 +84,4 @@ void				Client::setAsRegistered()
 //	this->_passAccepted = src._passAccepted;
 //	this->_registered = src._registered;
 //	return *this;
-//}
+// }
