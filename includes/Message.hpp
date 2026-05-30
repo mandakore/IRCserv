@@ -6,13 +6,9 @@
 class Message {
 public:
 	// Constructor&Destrcutor
-	Message ();
 	Message (const Message &src);
 	Message (const std::string &command, const std::vector<std::string> &params);
 	~Message ();
-
-	// Overload Operator
-	Message &operator= (const Message &src);
 
 	// Functions
 	const std::string &getCommand () const;
@@ -24,4 +20,8 @@ public:
 private:
 	std::string _command;
 	std::vector<std::string> _params;
+
+	// Forbidden OCF Functions
+	Message ();
+	Message &operator= (const Message &src);
 };
