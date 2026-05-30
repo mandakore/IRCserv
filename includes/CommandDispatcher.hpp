@@ -1,5 +1,6 @@
 #pragma once
 
+#include <string>
 #include "CommandResult.hpp"
 
 class Message;
@@ -13,9 +14,9 @@ public:
 private:
 	//
 	static const int cmdsCount = 10;
-	static const std::string cmds[cmdCount];
+	static const std::string cmds[cmdsCount];
 	// Command handleres
-	static int cmdNameToNumber (const std::string cmds[], const std::string &cmd);
+	static int _cmdNameToNumber (const std::string cmds[], const std::string &cmd);
 	static CommandResult _handleInvalidCommand ();
 	static CommandResult _handlePass (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);
