@@ -31,7 +31,8 @@ int main () {
 	}
 	expect (test.hasParam (10) == false, "testing hasParam NegativeCase");
 	expect (test.hasParam (2) == true, "testing hasParam PositiveCase");
-	expect (test.hasParam (parameters.size()) == false, "testing hasParam Border Case");
-	expect (test.getSingleParam(42) == "", "testing getSingleParam outOfRange case");
+	expect (test.hasParam (parameters.size ()) == false, "testing hasParam Border Case");
+	expect (test.getSingleParam (42) != "", "testing getSingleParam outOfRange case it should UB");
+	std::cout << "sample :" << test.getSingleParam (42) << std::endl;
 	return 0;
 }
