@@ -64,7 +64,7 @@ bool Channel::addMember (Client *target) {
 }
 
 bool Channel::addOperator (Client *target) {
-	if (isOperator (target)) {
+	if (!isOperator (target)) {
 		_operators.insert (target);
 		return true;
 	}
@@ -72,7 +72,7 @@ bool Channel::addOperator (Client *target) {
 }
 
 bool Channel::addInvitedMember (Client *target) {
-	if (isInvitedMember (target)) {
+	if (!isInvitedMember (target)) {
 		_invited.insert (target);
 		return true;
 	}
@@ -104,9 +104,9 @@ bool Channel::isChannelMember (Client *target) const {
 }
 
 bool Channel::isOperator (Client *target) const {
-	return _operators.find (target) != _members.end ();
+	return _operators.find (target) != _operators.end ();
 }
 
 bool Channel::isInvitedMember (Client *target) const {
-	return _invited.find (target) != _members.end ();
+	return _invited.find (target) != _invited.end ();
 }
