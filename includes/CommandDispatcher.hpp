@@ -7,25 +7,29 @@ class ServerState;
 
 class CommandDispatcher {
 public:
-	// Constructor&Destructor
+	// Functions
+	static CommandResult dispatch (int fd, const Message &msg, ServerState &state);
+
+private:
+	//
+	static const int cmdsCount = 10;
+	static const std::string cmds[cmdCount];
+	// Command handleres
+	static int cmdNameToNumber (const std::string cmds[], const std::string &cmd);
+	static CommandResult _handleInvalidCommand ();
+	static CommandResult _handlePass (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleUser (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleJoin (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handlePrivMsg (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleKick (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleInvite (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleTopic (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleMode (int fd, const Message &msg, ServerState &state);
+
+	// Forbidden OCF Functions
 	CommandDispatcher ();
 	CommandDispatcher (const CommandDispatcher &src);
 	~CommandDispatcher ();
-
-	// Overload Operator
 	CommandDispatcher &operator= (const CommandDispatcher &src);
-
-	// Functions
-	CommandResult dispatch (int fd, const Message &msg, ServerState &state);
-
-private:
-	CommandResult handlePass (int fd, const Message &msg, ServerState &state);
-	CommandResult handleNick (int fd, const Message &msg, ServerState &state);
-	CommandResult handleUser (int fd, const Message &msg, ServerState &state);
-	CommandResult handleJoin (int fd, const Message &msg, ServerState &state);
-	CommandResult handlePrivMsg (int fd, const Message &msg, ServerState &state);
-	CommandResult handleKick (int fd, const Message &msg, ServerState &state);
-	CommandResult handleInvite (int fd, const Message &msg, ServerState &state);
-	CommandResult handleTopic (int fd, const Message &msg, ServerState &state);
-	CommandResult handleMode (int fd, const Message &msg, ServerState &state);
 };
