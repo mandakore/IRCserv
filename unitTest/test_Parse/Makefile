@@ -1,8 +1,8 @@
 NAME		= ircserv
 CXX			= c++
-CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -pedantic -I ../includes -I src
+CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -pedantic -I ../../includes -I src
 
-SRCS_DIR	= ../src/
+SRCS_DIR	= ../../src/
 SRCS		= $(SRCS_DIR)main.cpp \
 			  $(SRCS_DIR)Banner.cpp \
 			  $(SRCS_DIR)Server.cpp \

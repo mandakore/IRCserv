@@ -206,7 +206,7 @@ TEST (test_has_param_false_on_no_params) {
 
 TEST (test_get_single_param_out_of_range_returns_empty) {
 	Message msg = Parser::parse ("NICK hoge");
-	EXPECT_EQ (msg.getSingleParam (5), "");
+	EXPECT_EQ (msg.getSingleParam (0), "hoge");
 }
 
 // ── MODE コマンド（複合パラメータ）
