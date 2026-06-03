@@ -12,9 +12,23 @@ public:
 	static CommandResult dispatch (int fd, const Message &msg, ServerState &state);
 
 private:
-	//
-	static const int cmdsCount = 10;
-	static const std::string cmds[cmdsCount];
+	// variables
+	enum e_command {
+		CMD_INVALID = 0,
+		CMD_PASS,
+		CMD_NICK,
+		CMD_USER,
+		CMD_JOIN,
+		CMD_PRIVMSG,
+		CMD_KICK,
+		CMD_INVITE,
+		CMD_TOPIC,
+		CMD_MODE,
+		CMD_COUNT
+	};
+
+	static const std::string cmds[CMD_COUNT];
+
 	// Command handleres
 	static int _cmdNameToNumber (const std::string cmds[], const std::string &cmd);
 	static CommandResult _handleInvalidCommand ();
