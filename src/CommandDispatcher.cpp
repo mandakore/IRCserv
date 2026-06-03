@@ -4,8 +4,8 @@ const std::string CommandDispatcher::cmds[CommandDispatcher::cmdsCount] = {
 	"INVALID", "PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"};
 
 CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerState &state) {
-	std::string cmdName = msg->getCommand ();
-	int cmdNumber = cmdNameToNumber (CommandDispatcher::cmds, cmdName);
+	std::string cmdName = msg.getCommand ();
+	int cmdNumber = _cmdNameToNumber (CommandDispatcher::cmds, cmdName);
 	switch (cmdNumber) {
 	case 1:
 		return _handlePass (fd, msg, state);
@@ -30,8 +30,8 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 	}
 }
 
-int CommandDispatcher::_cmdnameToNumber (const std::string cmds[], const std::string &cmd) {
-	for (int i = 0; i < cmdCount; ++i) {
+int CommandDispatcher::_cmdNameToNumber (const std::string cmds[], const std::string &cmd) {
+	for (int i = 0; i < cmdsCount; ++i) {
 		if (cmds[i] == cmd)
 			return i;
 	}
