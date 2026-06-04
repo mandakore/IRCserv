@@ -45,6 +45,8 @@ int CommandDispatcher::_cmdNameToNumber (const std::string cmds[], const std::st
 
 CommandResult CommandDispatcher::_handleInvalidCommand () {
 	// ErrorMsgとか詰める
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handlePass (int fd, const Message &msg, ServerState &state) {
@@ -135,22 +137,56 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 }
 
 CommandResult CommandDispatcher::_handleUser (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	Client *client = state.getClientByFd (fd);
+	if (client == NULL)
+		return result;
+	std::string reply;
+	if (msg.getParamCount () < 4) {
+		reply = ReplyBuilder::numeric (*client, "461", "USER");
+		result.addReply (fd, reply);
+		return result;
+	}
+	if (client->isRegistered ()) {
+		reply = ReplyBuilder::numeric (*client, "462", "USER");
+		result.addReply (fd, reply);
+		return result;
+	}
+	client->setUserName (msg.getSingleParam (0));
+	client->setRealName (msg.getSingleParam (3));
+	if (client->tryRegister ()) {
+		reply = ReplyBuilder::numeric (*client, "001", "");
+		result.addReply (fd, reply);
+	}
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleJoin (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handlePrivMsg (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, ServerState &state) {
+	CommandResult result;
+	return result;
 }
