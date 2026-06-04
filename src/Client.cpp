@@ -45,7 +45,7 @@ bool Client::isRegistered () const {
 
 bool Client::tryRegister () {
 	if (isRegistered ())
-		return true;
+		return false;
 	if (!this->isPassAccepted () || this->_username == "" || this->_nickname == "")
 		return false;
 	this->setAsRegistered ();

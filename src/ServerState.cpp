@@ -62,7 +62,7 @@ bool ServerState::updateNickname (Client &client, const std::string &nick) {
 		return false;
 	std::string oldNick = client.getNickName ();
 	if (nick == oldNick)
-		return false;
+		return true;
 	if (isNicknameExist (nick) == true)
 		return false;
 	std::pair<clientNickMap::iterator, bool> result;

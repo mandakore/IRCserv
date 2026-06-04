@@ -29,9 +29,12 @@ private:
 
 	static const std::string cmds[CMD_COUNT];
 
-	// Command handleres
+	// Handler helpers
 	static int _cmdNameToNumber (const std::string cmds[], const std::string &cmd);
 	static CommandResult _handleInvalidCommand ();
+	static bool _isLetterSpecial (unsigned char c);
+	static bool _isValidNick (const std::string &nick);
+	// Command handleress
 	static CommandResult _handlePass (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleUser (int fd, const Message &msg, ServerState &state);
