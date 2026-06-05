@@ -161,8 +161,91 @@ CommandResult CommandDispatcher::_handleUser (int fd, const Message &msg, Server
 	return result;
 }
 
+bool CommandDispatcher::_isValidChannelName (const std::string &name) {
+	if (name.empty ())
+		return false;
+	size_t len = name.length ();
+	if (len == 1)
+		return false;
+	if (name[0] != '#')
+		return false;
+	unsigned char c;
+	for (size_t i = 1; i < len; ++i) {
+		c = static_cast<unsigned char> (name[i]);
+		if (std::isspace (c) || c == ',' || c == ':' || std::iscntrl (c))
+			return false;
+	}
+	return true;
+}
+
+void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::string &channel,
+											const std::string &key, ServerState &state,
+											CommandResult &result) {
+	std::string reply;
+	if (!_isValidChannelName (channel)) {
+		reply = ReplyBuilder::numeric (client, "403", channel);
+		result.addReply (fd, reply);
+		return;
+	}
+	bool isNewChannel = false;
+	Channel *target = state.findChannel (channel);
+	if (target == NULL) {
+		isNewChannel = true;
+		target = state.ensureChannel (channel);
+		if (target == NULL)
+			return;
+	}
+	if (target->isChannelMember (&client))
+		return;
+	if (!isNewChannel) {
+		if (target->getModes ().isInviteOnly ()) {
+			if (!target->isInvitedMember (&client)) {
+				reply = ReplyBuilder::numeric (client, "473", channel);
+				result.addReply (fd, reply);
+				return;
+			}
+		}
+		if (target->getModes ().isChannelProtected ()) {
+			if (!target->getModes ().checkChannelPassword (key)) {
+				reply = ReplyBuilder::numeric (client, "475", channel);
+				result.addReply (fd, reply);
+				return;
+			}
+		}
+		int limit = target->getModes ().getMemberLimit ();
+		if (limit >= 0 && target->getMemberCount () >= limit) {
+			reply = ReplyBuilder::numeric (client, "471", channel);
+			result.addReply (fd, reply);
+			return;
+		}
+	}
+	if (!target->addMember (&client))
+		return;
+	if (isNewChannel) {
+		if (!target->addOperator (&client))
+			return;
+	}
+	reply = ReplyBuilder::join (client, channel);
+	result.addReply (fd, reply);
+	return;
+}
+
 CommandResult CommandDispatcher::_handleJoin (int fd, const Message &msg, ServerState &state) {
 	CommandResult result;
+	Client *client = state.getClientByFd (fd);
+	if (client == NULL)
+		return result;
+	std::string reply;
+	if (msg.getParamCount () < 1) {
+		reply = ReplyBuilder::numeric (*client, "461", "JOIN");
+		result.addReply (fd, reply);
+		return result;
+	}
+	std::string channel = msg.getSingleParam (0);
+	std::string key = "";
+	if (msg.hasParam (1))
+		key = msg.getSingleParam (1);
+	_joinSingleChannel (fd, *client, channel, key, state, result);
 	return result;
 }
 
