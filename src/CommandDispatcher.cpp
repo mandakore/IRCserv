@@ -204,7 +204,40 @@ bool CommandDispatcher::_isValidChannelName (const std::string &name) {
 	return true;
 }
 
-void CommandDispatcher::_notifyTopic(int fd, const Client& client, const Channel& channel, CommandResult& result)
+void CommandDispatcher::_notifyTopic (int fd, const Client &client, const Channel &channel,
+									  CommandResult &result) {
+	std::string reply;
+	std::string channelName = channel.getChannelName ();
+	std::string topic = channel.getChannelTopic ();
+	if (topic.empty ())
+		reply = ReplyBuilder::numeric (client, "331", channelName);
+	else
+		reply = ReplyBuilder::numeric (client, "332", channelName + " :" + topic);
+	result.addReply (fd, reply);
+	return;
+}
+
+void CommandDispatcher::_notifyMembers (int fd, const Client &client, const Channel &channel,
+										CommandResult &result) {
+	const std::set<Client *> &members = channel.getMembers ();
+	std::string memberLine = "";
+	for (std::set<Client *>::const_iterator it = members.begin (); it != members.end (); ++it) {
+		if (*it == NULL)
+			continue;
+		if (!memberLine.empty ())
+			memberLine += " ";
+		if (channel.isOperator (*it))
+			memberLine += "@";
+		memberLine += (*it)->getNickName ();
+	}
+	std::string reply;
+	std::string channelName = channel.getChannelName ();
+	reply = ReplyBuilder::numeric (client, "353", "= " + channelName + " :" + memberLine);
+	result.addReply (fd, reply);
+	reply = ReplyBuilder::numeric (client, "366", channelName + " :End of /NAMES list");
+	result.addReply (fd, reply);
+	return;
+}
 
 void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::string &channel,
 											const std::string &key, ServerState &state,
@@ -255,6 +288,8 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 	}
 	reply = ReplyBuilder::join (client, channel);
 	_broadcastToChannel (result, *target, reply, NULL);
+	_notifyTopic (fd, client, *target, result);
+	_notifyMembers (fd, client, *target, result);
 	return;
 }
 
@@ -298,11 +333,6 @@ CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, Serv
 }
 
 CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
-
-CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, ServerState &state) {
 	CommandResult result;
 	return result;
 }

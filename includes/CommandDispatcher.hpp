@@ -41,6 +41,10 @@ private:
 	static bool _isLetterSpecial (unsigned char c);
 	static bool _isValidNick (const std::string &nick);
 	static bool _isValidChannelName (const std::string &name);
+	static void _notifyTopic (int fd, const Client &client, const Channel &channel,
+							  CommandResult &result);
+	static void _notifyMembers (int fd, const Client &client, const Channel &channel,
+								CommandResult &result);
 	static void _joinSingleChannel (int fd, Client &client, const std::string &channel,
 									const std::string &key, ServerState &state,
 									CommandResult &result);
