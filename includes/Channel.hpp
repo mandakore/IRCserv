@@ -40,9 +40,9 @@ public:
 	bool removeClient (Client *target);
 
 	// Util Functions
-	bool isChannelMember (Client *target) const;
-	bool isOperator (Client *target) const;
-	bool isInvitedMember (Client *target) const;
+	bool isChannelMember (const Client *target) const;
+	bool isOperator (const Client *target) const;
+	bool isInvitedMember (const Client *target) const;
 
 private:
 	std::string _name;

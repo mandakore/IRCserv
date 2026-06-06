@@ -46,7 +46,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		result.addReply (fd, reply);
 		return result;
 	}
-	if (state.isNickExist (nick)) {
+	if (state.isNicknameExist (nick)) {
 		Client *used = state.getClientByNick (nick);
 		if (used != NULL && used != client) {
 			reply = ReplyBuilder::numeric (*client, "433", nick);

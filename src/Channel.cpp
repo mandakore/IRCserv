@@ -99,14 +99,14 @@ bool Channel::removeClient (Client *target) {
 }
 
 // Util Functions
-bool Channel::isChannelMember (Client *target) const {
+bool Channel::isChannelMember (const Client *target) const {
 	return _members.find (target) != _members.end ();
 }
 
-bool Channel::isOperator (Client *target) const {
+bool Channel::isOperator (const Client *target) const {
 	return _operators.find (target) != _operators.end ();
 }
 
-bool Channel::isInvitedMember (Client *target) const {
+bool Channel::isInvitedMember (const Client *target) const {
 	return _invited.find (target) != _invited.end ();
 }

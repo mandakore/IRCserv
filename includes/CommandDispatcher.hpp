@@ -48,6 +48,9 @@ private:
 	static void _joinSingleChannel (int fd, Client &client, const std::string &channel,
 									const std::string &key, ServerState &state,
 									CommandResult &result);
+	static void _sendPrivMsgToTarget (int fd, const Client &client, const std::string &target,
+									  const std::string &msg, const ServerState &state,
+									  CommandResult &result);
 	// Command handleress
 	static CommandResult _handlePass (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);
