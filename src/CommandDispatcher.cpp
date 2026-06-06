@@ -23,14 +23,14 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 		return _handleUser (fd, msg, state);
 	case CMD_JOIN:
 		return _handleJoin (fd, msg, state);
-	case CMD_PRIVMSG:
-		return _handlePrivMsg (fd, msg, state);
-	case CMD_KICK:
-		return _handleKick (fd, msg, state);
-	case CMD_INVITE:
-		return _handleInvite (fd, msg, state);
-	case CMD_TOPIC:
-		return _handleTopic (fd, msg, state);
+	// case CMD_PRIVMSG:
+	// 	return _handlePrivMsg (fd, msg, state);
+	// case CMD_KICK:
+	// 	return _handleKick (fd, msg, state);
+	// case CMD_INVITE:
+	// 	return _handleInvite (fd, msg, state);
+	// case CMD_TOPIC:
+	// 	return _handleTopic (fd, msg, state);
 	case CMD_MODE:
 		return _handleMode (fd, msg, state);
 	default:
@@ -142,7 +142,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		result.addReply (fd, reply);
 		return result;
 	}
-	if (state.isNickExist (nick)) {
+	if (state.isNicknameExist (nick)) {
 		Client *used = state.getClientByNick (nick);
 		if (used != NULL && used != client) {
 			reply = ReplyBuilder::numeric (*client, "433", nick);
@@ -150,7 +150,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 			return result;
 		}
 	}
-	if (!state.updateNickName (*client, nick)) {
+	if (!state.updateNickname (*client, nick)) {
 		reply = ReplyBuilder::numeric (*client, "433", nick);
 		result.addReply (fd, reply);
 		return result;
@@ -204,7 +204,7 @@ bool CommandDispatcher::_isValidChannelName (const std::string &name) {
 	return true;
 }
 
-void CommandDispatcher::_notifyTopic(int fd, const Client& client, const Channel& channel, CommandResult& result)
+// void CommandDispatcher::_notifyTopic(int fd, const Client& client, const Channel& channel, CommandResult& result)
 
 void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::string &channel,
 											const std::string &key, ServerState &state,
@@ -240,7 +240,7 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 				return;
 			}
 		}
-		int limit = target->getModes ().getMemberLimit ();
+		size_t limit = target->getModes ().getMemberLimit ();
 		if (limit >= 0 && target->getMemberCount () >= limit) {
 			reply = ReplyBuilder::numeric (client, "471", channel);
 			result.addReply (fd, reply);
@@ -282,22 +282,22 @@ CommandResult CommandDispatcher::_handleJoin (int fd, const Message &msg, Server
 	return result;
 }
 
-CommandResult CommandDispatcher::_handlePrivMsg (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
+// CommandResult CommandDispatcher::_handlePrivMsg (int fd, const Message &msg, ServerState &state) {
+// 	CommandResult result;
+// 	return result;
+// }
 
-CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
+// CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, ServerState &state) {
+// 	CommandResult result;
+// 	return result;
+// }
 
-CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
+// CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, ServerState &state) {
+// 	CommandResult result;
+// 	return result;
+// }
 
-CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
+// CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, ServerState &state) {
+// 	CommandResult result;
+// 	return result;
+// }
