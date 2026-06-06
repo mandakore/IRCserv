@@ -38,6 +38,19 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 	}
 }
 
+std::vector<std::string> CommandDispatcher::_splitByComma (const std::string &target) {
+	std::vector<std::string> result;
+	size_t start = 0;
+	for (size_t i = 0; i < target.length (); ++i) {
+		if (target[i] == ',') {
+			result.push_back (target.substr (start, i - start));
+			start = i + 1;
+		}
+	}
+	result.push_back (target.substr (start));
+	return result;
+}
+
 int CommandDispatcher::_cmdNameToNumber (const std::string cmds[], const std::string &cmd) {
 	for (int i = 0; i < CMD_COUNT; ++i) {
 		if (cmds[i] == cmd)
@@ -58,11 +71,6 @@ void CommandDispatcher::_broadcastToChannel (CommandResult &result, const Channe
 
 CommandResult CommandDispatcher::_handleInvalidCommand () {
 	// ErrorMsgとか詰める
-	CommandResult result;
-	return result;
-}
-
-CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, ServerState &state) {
 	CommandResult result;
 	return result;
 }

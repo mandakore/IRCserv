@@ -8,19 +8,6 @@
 #include "ReplyBuilder.hpp"
 #include "ServerState.hpp"
 
-std::vector<std::string> CommandDispatcher::_splitByComma (const std::string &target) {
-	std::vector<std::string> result;
-	size_t start = 0;
-	for (size_t i = 0; i < target.length (); ++i) {
-		if (target[i] == ',') {
-			result.push_back (target.substr (start, i - start));
-			start = i + 1;
-		}
-	}
-	result.push_back (target.substr (start));
-	return result;
-}
-
 bool CommandDispatcher::_isValidChannelName (const std::string &name) {
 	if (name.empty ())
 		return false;
