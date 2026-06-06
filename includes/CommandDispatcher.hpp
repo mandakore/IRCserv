@@ -1,8 +1,11 @@
 #pragma once
 
 #include <string>
+#include <vector>
 #include "CommandResult.hpp"
 
+class Channel;
+class Client;
 class Message;
 class ServerState;
 
@@ -31,9 +34,16 @@ private:
 
 	// Handler helpers
 	static int _cmdNameToNumber (const std::string cmds[], const std::string &cmd);
+	static void _broadcastToChannel (CommandResult &result, const Channel &channel,
+									 const std::string &message, const Client *except);
+	static std::vector<std::string> _splitByComma (const std::string &target);
 	static CommandResult _handleInvalidCommand ();
 	static bool _isLetterSpecial (unsigned char c);
 	static bool _isValidNick (const std::string &nick);
+	static bool _isValidChannelName (const std::string &name);
+	static void _joinSingleChannel (int fd, Client &client, const std::string &channel,
+									const std::string &key, ServerState &state,
+									CommandResult &result);
 	// Command handleress
 	static CommandResult _handlePass (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);

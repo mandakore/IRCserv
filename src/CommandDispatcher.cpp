@@ -1,9 +1,12 @@
 #include <cctype>
+#include <set>
+#include "Channel.hpp"
+#include "ChannelModes.hpp"
+#include "Client.hpp"
 #include "CommandDispatcher.hpp"
 #include "Message.hpp"
-#include "ServerState.hpp"
-#include "Client.hpp"
 #include "ReplyBuilder.hpp"
+#include "ServerState.hpp"
 
 const std::string CommandDispatcher::cmds[CommandDispatcher::CMD_COUNT] = {
 	"INVALID", "PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"};
@@ -41,6 +44,29 @@ int CommandDispatcher::_cmdNameToNumber (const std::string cmds[], const std::st
 			return i;
 	}
 	return CMD_INVALID;
+}
+
+void CommandDispatcher::_broadcastToChannel (CommandResult &result, const Channel &channel,
+											 const std::string &message, const Client *except) {
+	const std::set<Client *> &members = channel.getMembers ();
+	for (std::set<Client *>::const_iterator it = members.begin (); it != members.end (); ++it) {
+		if (*it != NULL && *it != except)
+			result.addReply ((*it)->getSocketFd (), message);
+	}
+	return;
+}
+
+std::vector<std::string> CommandDispatcher::_splitByComma (const std::string &target) {
+	std::vector<std::string> result;
+	size_t start = 0;
+	for (size_t i = 0; i < target.length (); ++i) {
+		if (target[i] == ',') {
+			result.push_back (target.substr (start, i - start));
+			start = i + 1;
+		}
+	}
+	result.push_back (target.substr (start));
+	return result;
 }
 
 CommandResult CommandDispatcher::_handleInvalidCommand () {
@@ -178,6 +204,8 @@ bool CommandDispatcher::_isValidChannelName (const std::string &name) {
 	return true;
 }
 
+void CommandDispatcher::_notifyTopic(int fd, const Client& client, const Channel& channel, CommandResult& result)
+
 void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::string &channel,
 											const std::string &key, ServerState &state,
 											CommandResult &result) {
@@ -226,7 +254,7 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 			return;
 	}
 	reply = ReplyBuilder::join (client, channel);
-	result.addReply (fd, reply);
+	_broadcastToChannel (result, *target, reply, NULL);
 	return;
 }
 
@@ -241,11 +269,16 @@ CommandResult CommandDispatcher::_handleJoin (int fd, const Message &msg, Server
 		result.addReply (fd, reply);
 		return result;
 	}
-	std::string channel = msg.getSingleParam (0);
-	std::string key = "";
+	std::vector<std::string> channels = _splitByComma (msg.getSingleParam (0));
+	std::vector<std::string> keys;
 	if (msg.hasParam (1))
-		key = msg.getSingleParam (1);
-	_joinSingleChannel (fd, *client, channel, key, state, result);
+		keys = _splitByComma (msg.getSingleParam (1));
+	for (size_t i = 0; i < channels.size (); ++i) {
+		std::string key = "";
+		if (i < keys.size ())
+			key = keys[i];
+		_joinSingleChannel (fd, *client, channels[i], key, state, result);
+	}
 	return result;
 }
 
