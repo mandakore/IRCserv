@@ -301,8 +301,3 @@ CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, Serve
 	CommandResult result;
 	return result;
 }
-
-CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
