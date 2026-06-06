@@ -32,6 +32,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 	if (msg.getParamCount () == 1) {
 		std::string currentMode = "+";
 		//
+		return result;
 	}
 
 	//
@@ -132,6 +133,17 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					std::string reply = ReplyBuilder::numeric(*client, "472", "要検討"); // 何を出力する？
 					result.addReply(fd, reply);
 					break;
+			}
+			if (modeChanged) {
+				char currentSign = adding ? '+' : '-';
+				if (currentSign != lastSign) {
+					finalModes += currentSign;
+					lastSign = currentSign;
+				}
+				finalModes += c;
+				if (!modeParam.empty()) {
+					finalParams += " " + modeParam;
+				}
 			}
 		}
 	}
