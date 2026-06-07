@@ -60,9 +60,8 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		return result;
 	}
 
-	//
 	std::string modeString = msg.getSingleParam (1);
-	bool adding = true; //
+	bool adding = true;
 	size_t paramIndex = 2;
 
 	std::string finalModes = "";
@@ -141,9 +140,9 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 				if (paramIndex < msg.getParamCount ()) {
 					modeParam = msg.getSingleParam (paramIndex++);
 					Client *targetClient = state.getClientByNick (modeParam);
-					if (!targetClient){
-						std::string reply = ReplyBuilder::numeric(*client, "401", target);
-						result.addReply(fd, reply);
+					if (!targetClient) {
+						std::string reply = ReplyBuilder::numeric (*client, "401", target);
+						result.addReply (fd, reply);
 						return result;
 					}
 					if (targetClient && channel->isChannelMember (targetClient)) {
@@ -155,16 +154,14 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 								modeChanged = true;
 						}
 					} else {
-						// ユーザーがチャンネルにいない場合のエラー
 						std::string reply = ReplyBuilder::numeric (*client, "441", target);
 						result.addReply (fd, reply);
 					}
 				}
 				break;
 
-			default: //
-				std::string reply =
-					ReplyBuilder::numeric (*client, "472", "MODE"); 
+			default:
+				std::string reply = ReplyBuilder::numeric (*client, "472", "MODE");
 				result.addReply (fd, reply);
 				break;
 			}
@@ -184,13 +181,10 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 	if (!finalModes.empty ()) {
 		std::string fullModeStr = finalModes + finalParams;
 		std::string broadcastMsg = ReplyBuilder::mode (*client, target, fullModeStr);
-
-		const std::set<Client *> &members = channel->getMembers ();
-		for (std::set<Client *>::const_iterator it = members.begin (); it != members.end (); ++it) {
-			result.addReply ((*it)->getSocketFd (), broadcastMsg);
-		}
+		_broadcastToChannel (result, *channel, broadcastMsg, NULL);
 	}
-	return result;
+}
+return result;
 }
 
 // MODE <your nick>|<channel> [<mode> [<mode parameters>]]
