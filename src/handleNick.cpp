@@ -36,7 +36,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		return result;
 	std::string reply;
 	if (msg.getParamCount () < 1) {
-		reply = ReplyBuilder::numeric (*client, "431", "NICK");
+		reply = ReplyBuilder::numeric (*client, "431", "");
 		result.addReply (fd, reply);
 		return result;
 	}
@@ -60,7 +60,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		return result;
 	}
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", "");
+		reply = ReplyBuilder::numeric (*client, "001", nick + "!" + client->getUsername ());
 		result.addReply (fd, reply);
 	}
 	return result;

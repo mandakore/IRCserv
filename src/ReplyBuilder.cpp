@@ -1,8 +1,11 @@
 #include "ReplyBuilder.hpp"
 #include "Client.hpp"
 
-std::string ReplyBuilder::numeric (const std::string &target, const std::string &num,
-								   const std::string &msg) {
+static
+
+	std::string
+	ReplyBuilder::numeric (const std::string &target, const std::string &num,
+						   const std::string &msg) {
 	return num + " " + target + " " + msg + "\r\n";
 }
 

@@ -27,7 +27,8 @@ CommandResult CommandDispatcher::_handleUser (int fd, const Message &msg, Server
 	client->setUserName (msg.getSingleParam (0));
 	client->setRealName (msg.getSingleParam (3));
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", "");
+		reply = ReplyBuilder::numeric (*client, "001",
+									   client->getNickname () + "!" + client->getUsername ());
 		result.addReply (fd, reply);
 	}
 	return result;

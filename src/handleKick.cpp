@@ -10,7 +10,7 @@ void CommandDispatcher::_kickSingleTarget (int fd, Client &client, const std::st
 										   ServerState &state, CommandResult &result) {
 	std::string reply;
 	if (nick.empty ()) {
-		reply = ReplyBuilder::numeric (client, "401", "KICK");
+		reply = ReplyBuilder::numeric (client, "401", "");
 		result.addReply (fd, reply);
 		return;
 	}
@@ -28,7 +28,7 @@ void CommandDispatcher::_kickSingleTarget (int fd, Client &client, const std::st
 	}
 	std::string clientName = client.getNickName ();
 	if (clientName.empty ()) {
-		reply = ReplyBuilder::numeric (client, "401", "KICK");
+		reply = ReplyBuilder::numeric (client, "401", "");
 		result.addReply (fd, reply);
 		return;
 	}

@@ -20,18 +20,19 @@ CommandResult CommandDispatcher::_handlePass (int fd, const Message &msg, Server
 		return result;
 	}
 	if (client->isRegistered ()) {
-		reply = ReplyBuilder::numeric (*client, "462", "PASS");
+		reply = ReplyBuilder::numeric (*client, "462", "");
 		result.addReply (fd, reply);
 		return result;
 	}
 	if (!state.isCorrectPassword (msg.getSingleParam (0))) {
-		reply = ReplyBuilder::numeric (*client, "464", "PASS");
+		reply = ReplyBuilder::numeric (*client, "464", "");
 		result.addReply (fd, reply);
 		return result;
 	}
 	client->acceptPassword ();
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", "");
+		reply = ReplyBuilder::numeric (*client, "001",
+									   client->getNickname () + "!" + client->getUsername ());
 		result.addReply (fd, reply);
 	}
 	return result;
