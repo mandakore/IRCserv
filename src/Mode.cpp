@@ -48,7 +48,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		return result;
 	}
 
-	if (channel->isChannelMember (client)) {
+	if (!channel->isChannelMember (client)) {
 		std::string reply = ReplyBuilder::numeric (*client, "442", target);
 		result.addReply (fd, reply);
 		return result;
