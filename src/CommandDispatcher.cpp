@@ -35,7 +35,7 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 		return _handleMode (fd, msg, state);
 	// Add IRSSI Commands
 	default:
-		return _handleInvalidCommand ();
+		return _handleInvalidCommand (fd, msg, state);
 	}
 }
 
@@ -70,8 +70,13 @@ void CommandDispatcher::_broadcastToChannel (CommandResult &result, const Channe
 	return;
 }
 
-CommandResult CommandDispatcher::_handleInvalidCommand () {
-	// ErrorMsgとか詰める
+CommandResult CommandDispatcher::_handleInvalidCommand (int fd, const Message &msg,
+														ServerState &state) {
 	CommandResult result;
+	Client *client = state.getClientByFd (fd);
+	if (client == NULL)
+		return result;
+	std::string reply = ReplyBuilder::numeric (*client, "421", msg.getCommand ());
+	result.addReply (fd, reply);
 	return result;
 }
