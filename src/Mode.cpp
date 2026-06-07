@@ -16,7 +16,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 	}
 	std::string reply;
 	if (msg.getParamCount () < 1) {
-		reply = ReplyBuilder::numeric (*client, "461", "MODE"); 
+		reply = ReplyBuilder::numeric (*client, "461", "MODE");
 		result.addReply (fd, reply);
 		return result;
 	}
@@ -24,14 +24,39 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 
 	Channel *channel = state.findChannel (target);
 	if (!channel) {
-		reply = ReplyBuilder::numeric (*client, "403", target); 
+		reply = ReplyBuilder::numeric (*client, "403", target);
 		result.addReply (fd, reply);
 		return result;
 	}
 
 	if (msg.getParamCount () == 1) {
-		std::string currentMode = "+";
-		//
+		std::string currentModes = "+";
+		if (channel->getModes ().isInviteOnly ()) {
+			currentModes += "i";
+		}
+		if (channel->getModes ().isTopicRestricted ()) {
+			currentModes += "t";
+		}
+		if (channel->getModes ().isChannelProtected ()) {
+			currentModes += "k";
+		}
+		if (channel->getModes ().getMemberLimit () > 0) {
+			currentModes += "l";
+		}
+		std::string reply = ReplyBuilder::numeric (*client, "324", target);
+		result.addReply (fd, reply);
+		return result;
+	}
+
+	if (channel->isChannelMember (client)) {
+		std::string reply = ReplyBuilder::numeric (*client, "442", target);
+		result.addReply (fd, reply);
+		return result;
+	}
+
+	if (!channel->isOperator (client)) {
+		std::string reply = ReplyBuilder::numeric (*client, "482", target);
+		result.addReply (fd, reply);
 		return result;
 	}
 
@@ -55,84 +80,93 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 			bool modeChanged = false;
 			std::string modeParam = "";
 
-					switch (c) {
-				case 'i': 
-					if (adding && !channel->getModes().isInviteOnly()) {
-						channel->getModes().setInviteOnly();
-						modeChanged = true;
-					} else if (!adding && channel->getModes().isInviteOnly()) {
-						channel->getModes().unsetInviteOnly();
+			switch (c) {
+			case 'i':
+				if (adding && !channel->getModes ().isInviteOnly ()) {
+					channel->getModes ().setInviteOnly ();
+					modeChanged = true;
+				} else if (!adding && channel->getModes ().isInviteOnly ()) {
+					channel->getModes ().unsetInviteOnly ();
+					modeChanged = true;
+				}
+				break;
+
+			case 't':
+				if (adding && !channel->getModes ().isTopicRestricted ()) {
+					channel->getModes ().setTopicRestricted ();
+					modeChanged = true;
+				} else if (!adding && channel->getModes ().isTopicRestricted ()) {
+					channel->getModes ().unsetTopicRestricted ();
+					modeChanged = true;
+				}
+				break;
+
+			case 'k':
+				if (adding) {
+					if (paramIndex < msg.getParamCount ()) {
+						modeParam = msg.getSingleParam (paramIndex++);
+						channel->getModes ().setChannelProtected (modeParam);
 						modeChanged = true;
 					}
-					break;
+				} else {
+					if (channel->getModes ().isChannelProtected ()) {
+						channel->getModes ().unsetChannelProtected ();
+						modeChanged = true;
 
-				case 't': 
-					if (adding && !channel->getModes().isTopicRestricted()) {
-						channel->getModes().setTopicRestricted();
-						modeChanged = true;
-					} else if (!adding && channel->getModes().isTopicRestricted()) {
-						channel->getModes().unsetTopicRestricted();
-						modeChanged = true;
+						if (paramIndex < msg.getParamCount ())
+							paramIndex++;
 					}
-					break;
+				}
+				break;
 
-				case 'k': 
-					if (adding) {
-						if (paramIndex < msg.getParamCount()) {
-							modeParam = msg.getSingleParam(paramIndex++);
-							channel->getModes().setChannelProtected(modeParam);
+			case 'l':
+				if (adding) {
+					if (paramIndex < msg.getParamCount ()) {
+						modeParam = msg.getSingleParam (paramIndex++);
+						int limit = std::atoi (modeParam.c_str ());
+						if (limit > 0) {
+							channel->getModes ().setMemberLimit (limit);
 							modeChanged = true;
 						}
-					} else {
-						if (channel->getModes().isChannelProtected()) {
-							channel->getModes().unsetChannelProtected();
-							modeChanged = true;
-
-							if (paramIndex < msg.getParamCount()) paramIndex++;
-						}
 					}
-					break;
+				} else {
+					if (channel->getModes ().getMemberLimit () > 0) {
+						channel->getModes ().unsetMemberLimit ();
+						modeChanged = true;
+					}
+				}
+				break;
 
-				case 'l':
-					if (adding) {
-						if (paramIndex < msg.getParamCount()) {
-							modeParam = msg.getSingleParam(paramIndex++);
-							int limit = std::atoi(modeParam.c_str());
-							if (limit > 0) {
-								channel->getModes().setMemberLimit(limit);
+			case 'o':
+				if (paramIndex < msg.getParamCount ()) {
+					modeParam = msg.getSingleParam (paramIndex++);
+					Client *targetClient = state.getClientByNick (modeParam);
+					if (!targetClient){
+						std::string reply = ReplyBuilder::numeric(*client, "401", target);
+						result.addReply(fd, reply);
+						return result;
+					}
+					if (targetClient && channel->isChannelMember (targetClient)) {
+						if (adding) {
+							if (channel->addOperator (targetClient))
 								modeChanged = true;
-							}
+						} else {
+							if (channel->removeOperator (targetClient))
+								modeChanged = true;
 						}
 					} else {
-						if (channel->getModes().getMemberLimit() > 0) {
-							channel->getModes().unsetMemberLimit();
-							modeChanged = true;
-						}
+						// ユーザーがチャンネルにいない場合のエラー
+						std::string reply = ReplyBuilder::numeric (*client, "441", target);
+						result.addReply (fd, reply);
 					}
-					break;
+				}
+				break;
 
-				case 'o':
-					if (paramIndex < msg.getParamCount()) {
-						modeParam = msg.getSingleParam(paramIndex++);
-						Client *targetClient = state.getClientByNick(modeParam);
-						if (targetClient && channel->isChannelMember(targetClient)) {
-							if (adding) {
-								if (channel->addOperator(targetClient)) modeChanged = true;
-							} else {
-								if (channel->removeOperator(targetClient)) modeChanged = true;
-							}
-						} else {
-							// ユーザーがチャンネルにいない場合のエラー
-							std::string reply = ReplyBuilder::numeric(*client, "441", target);
-							result.addReply(fd, reply);
-						}
-					}
-					break;
-
-				default: // 
-					std::string reply = ReplyBuilder::numeric(*client, "472", "要検討"); // 何を出力する？
-					result.addReply(fd, reply);
-					break;
+			default: //
+				std::string reply =
+					ReplyBuilder::numeric (*client, "472", "MODE"); 
+				result.addReply (fd, reply);
+				break;
 			}
 			if (modeChanged) {
 				char currentSign = adding ? '+' : '-';
@@ -141,7 +175,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					lastSign = currentSign;
 				}
 				finalModes += c;
-				if (!modeParam.empty()) {
+				if (!modeParam.empty ()) {
 					finalParams += " " + modeParam;
 				}
 			}
