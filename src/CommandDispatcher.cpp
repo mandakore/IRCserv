@@ -33,6 +33,7 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 		return _handleTopic (fd, msg, state);
 	case CMD_MODE:
 		return _handleMode (fd, msg, state);
+	// Add IRSSI Commands
 	default:
 		return _handleInvalidCommand ();
 	}
