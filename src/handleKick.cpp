@@ -5,6 +5,58 @@
 #include "ReplyBuilder.hpp"
 #include "ServerState.hpp"
 
+void CommandDispatcher::_kickSingleTarget (int fd, Client &client, const std::string &channelName,
+										   const std::string &nick, const std::string &reason,
+										   ServerState &state, CommandResult &result) {
+	std::string reply;
+	if (nick.empty ()) {
+		reply = ReplyBuilder::numeric (client, "401", "KICK");
+		result.addReply (fd, reply);
+		return;
+	}
+	Channel *channel = state.findChannel (channelName);
+	if (channel == NULL) {
+		reply = ReplyBuilder::numeric (client, "403", channelName);
+		result.addReply (fd, reply);
+		return;
+	}
+	Client *target = state.getClientByNick (nick);
+	if (!target) {
+		reply = ReplyBuilder::numeric (client, "401", nick);
+		result.addReply (fd, reply);
+		return;
+	}
+	std::string clientName = client.getNickName ();
+	if (clientName.empty ()) {
+		reply = ReplyBuilder::numeric (client, "401", "KICK");
+		result.addReply (fd, reply);
+		return;
+	}
+	if (!channel->isChannelMember (&client)) {
+		reply = ReplyBuilder::numeric (client, "442", channelName);
+		result.addReply (fd, reply);
+		return;
+	}
+	if (!channel->isOperator (&client)) {
+		reply = ReplyBuilder::numeric (client, "482", channelName);
+		result.addReply (fd, reply);
+		return;
+	}
+	if (!channel->isChannelMember (target)) {
+		reply = ReplyBuilder::numeric (client, "441", nick + " " + channelName);
+		result.addReply (fd, reply);
+		return;
+	}
+	reply = ReplyBuilder::kick (client, *target, channelName, reason);
+	_broadcastToChannel (result, *channel, reply, NULL);
+	if (!channel->removeClient (target)) {
+		reply = ReplyBuilder::numeric (client, "441", nick + " " + channelName);
+		result.addReply (fd, reply);
+		return;
+	}
+	return;
+}
+
 CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, ServerState &state) {
 	CommandResult result;
 	Client *client = state.getClientByFd (fd);
