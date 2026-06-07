@@ -43,12 +43,12 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		if (channel->getModes ().getMemberLimit () > 0) {
 			currentModes += "l";
 		}
-		std::string reply = ReplyBuilder::numeric (*client, "324", target);
+		std::string reply = ReplyBuilder::numeric (*client, "324", target + ":" + currentModes);
 		result.addReply (fd, reply);
 		return result;
 	}
 
-	if (channel->isChannelMember (client)) {
+	if (!channel->isChannelMember (client)) {
 		std::string reply = ReplyBuilder::numeric (*client, "442", target);
 		result.addReply (fd, reply);
 		return result;
