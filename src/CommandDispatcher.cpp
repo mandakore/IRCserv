@@ -75,11 +75,6 @@ CommandResult CommandDispatcher::_handleInvalidCommand () {
 	return result;
 }
 
-CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, ServerState &state) {
-	CommandResult result;
-	return result;
-}
-
 CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, ServerState &state) {
 	CommandResult result;
 	return result;
