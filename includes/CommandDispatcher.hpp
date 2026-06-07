@@ -49,10 +49,10 @@ private:
 	static CommandResult _handleNick (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleUser (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleJoin (int fd, const Message &msg, ServerState &state);
-	static CommandResult _handlePrivMsg (int fd, const Message &msg, ServerState &state);
-	static CommandResult _handleKick (int fd, const Message &msg, ServerState &state);
-	static CommandResult _handleInvite (int fd, const Message &msg, ServerState &state);
-	static CommandResult _handleTopic (int fd, const Message &msg, ServerState &state);
+	// static CommandResult _handlePrivMsg (int fd, const Message &msg, ServerState &state);
+	// static CommandResult _handleKick (int fd, const Message &msg, ServerState &state);
+	// static CommandResult _handleInvite (int fd, const Message &msg, ServerState &state);
+	// static CommandResult _handleTopic (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleMode (int fd, const Message &msg, ServerState &state);
 
 	// Forbidden OCF Functions
