@@ -27,41 +27,45 @@ public:
 							 const std::string &modeStr);
 
 private:
+	// Numeric Messages Definition // Format: Code / arg:"Required param puttern <Optional param>"
 	// Numeric Reply Messages
-	static const std::string MSG_WELCOME;		// 001 arg:"nick!user"
-	static const std::string MSG_CHANNELMODEIS; // 324
-	static const std::string MSG_NOTOPIC;		// 331
-	static const std::string MSG_TOPIC;			// 332
-	static const std::string MSG_INVITING;		// 341
-	static const std::string MSG_NAMREPRY;		// 353
-	static const std::string MSG_ENDOFNAMES;	// 366
+	static const std::string MSG_WELCOME;		// 001 arg:""
+	static const std::string MSG_CHANNELMODEIS; // 324 arg:"channel mode <modeParams>"
+	static const std::string MSG_NOTOPIC;		// 331 arg:"channel"
+	static const std::string MSG_TOPIC;			// 332 arg:"channel :topic"
+	static const std::string MSG_INVITING;		// 341 arg:"nick channel"
+	static const std::string MSG_NAMREPLY;		// 353 arg:"channel :nick <nick2...>"
+	static const std::string MSG_ENDOFNAMES;	// 366 arg:"channel"
 
 	// Numeric Error Messages
-	static const std::string MSG_NOSUCHNICK;		// 401
-	static const std::string MSG_NOSUCHCHANNEL;		// 403
-	static const std::string MSG_CANNOTSENDTOCHAN;	// 404
-	static const std::string MSG_TOOMANYTARGETS;	// 407
-	static const std::string MSG_NORECIPIENT;		// 411
-	static const std::string MSG_NOTEXTTOSEND;		// 412
-	static const std::string MSG_UNKNOWNCOMMAND;	// 421
-	static const std::string MSG_NONICKNAMEGIVEN;	// 431
-	static const std::string MSG_ERRONEUSNICKNAME;	// 432
-	static const std::string MSG_NICKNAMEINUSE;		// 433
-	static const std::string MSG_USERNOTINCHANNEL;	// 441
-	static const std::string MSG_NOTONCHANNEL;		// 442
-	static const std::string MSG_USEONCHANNEL;		// 443
-	static const std::string MSG_NEEDMOREPARAMS;	// 461
-	static const std::string MSG_ALREADYREGISTERED; // 462
-	static const std::string MSG_PASSWDMISMATCH;	// 464
-	static const std::string MSG_KEYSET;			// 467
-	static const std::string MSG_CHANNELISFULL;		// 471
-	static const std::string MSG_UNKNOWNMODE;		// 472
-	static const std::string MSG_INVITEONLYCHAN;	// 473
-	static const std::string MSG_BADCHANNELKEY;		// 475
-	static const std::string MSG_CHANOPRIVSNEEDED;	// 482
+	static const std::string MSG_NOSUCHNICK;		// 401 arg:"nick"
+	static const std::string MSG_NOSUCHCHANNEL;		// 403 arg:"channel"
+	static const std::string MSG_CANNOTSENDTOCHAN;	// 404 arg:"channel"
+	static const std::string MSG_NORECIPIENT;		// 411 arg:"<command>"
+	static const std::string MSG_NOTEXTTOSEND;		// 412 arg:""
+	static const std::string MSG_UNKNOWNCOMMAND;	// 421 arg:"command"
+	static const std::string MSG_NONICKNAMEGIVEN;	// 431 arg:""
+	static const std::string MSG_ERRONEUSNICKNAME;	// 432 arg:"nick"
+	static const std::string MSG_NICKNAMEINUSE;		// 433 arg:"nick"
+	static const std::string MSG_USERNOTINCHANNEL;	// 441 arg:"nick channel"
+	static const std::string MSG_NOTONCHANNEL;		// 442 arg:"channel"
+	static const std::string MSG_USERONCHANNEL;		// 443 arg:"nick channel"
+	static const std::string MSG_NEEDMOREPARAMS;	// 461 arg:"command"
+	static const std::string MSG_ALREADYREGISTERED; // 462 arg:""
+	static const std::string MSG_PASSWDMISMATCH;	// 464 arg:""
+	static const std::string MSG_KEYSET;			// 467 arg:"channel"
+	static const std::string MSG_CHANNELISFULL;		// 471 arg:"channel"
+	static const std::string MSG_UNKNOWNMODE;		// 472 arg:"modeChar"
+	static const std::string MSG_INVITEONLYCHAN;	// 473 arg:"channel"
+	static const std::string MSG_BADCHANNELKEY;		// 475 arg:"channel"
+	static const std::string MSG_CHANOPRIVSNEEDED;	// 482 arg:"channel"
 
+	// Unknown Numeric Code
+	static const std::string MSG_UNKNOWNNUMERIC;
+	// Private helper
+	static std::string getValidTargetName (const Client &target);
 	static std::string getNumericMessage (const std::string &num);
-	static std::string getTargetName (const Client &client);
+	static std::string buildPrefix (const Client &client);
 
 	// Forbidden OCF Functions
 	ReplyBuilder ();
