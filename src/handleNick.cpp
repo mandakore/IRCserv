@@ -60,7 +60,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		return result;
 	}
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", nick + "!" + client->getUserName ());
+		reply = ReplyBuilder::numeric (*client, "001", "");
 		result.addReply (fd, reply);
 	}
 	return result;
