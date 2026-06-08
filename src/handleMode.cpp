@@ -141,7 +141,8 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					modeParam = msg.getSingleParam (paramIndex++);
 					Client *targetClient = state.getClientByNick (modeParam);
 					if (!targetClient) {
-						std::string reply = ReplyBuilder::numeric (*client, "401", target);
+						std::string reply =
+							ReplyBuilder::numeric (*client, "401", targetClient->getNickName ());
 						result.addReply (fd, reply);
 						return result;
 					}
@@ -154,14 +155,17 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 								modeChanged = true;
 						}
 					} else {
-						std::string reply = ReplyBuilder::numeric (*client, "441", target);
+						std::string reply = ReplyBuilder::numeric (
+							*client, "441", targetClient->getNickName () + " " + target);
 						result.addReply (fd, reply);
 					}
 				}
 				break;
 
 			default:
-				std::string reply = ReplyBuilder::numeric (*client, "472", "MODE");
+				std::string modeChar = " ";
+				modeChar[0] = c;
+				std::string reply = ReplyBuilder::numeric (*client, "472", modeChar);
 				result.addReply (fd, reply);
 				break;
 			}

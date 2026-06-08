@@ -20,7 +20,7 @@ CommandResult CommandDispatcher::_handleUser (int fd, const Message &msg, Server
 		return result;
 	}
 	if (client->isRegistered ()) {
-		reply = ReplyBuilder::numeric (*client, "462", "USER");
+		reply = ReplyBuilder::numeric (*client, "462", "");
 		result.addReply (fd, reply);
 		return result;
 	}

@@ -53,7 +53,7 @@ void CommandDispatcher::_notifyMembers (int fd, const Client &client, const Chan
 	}
 	std::string reply;
 	std::string channelName = channel.getChannelName ();
-	reply = ReplyBuilder::numeric (client, "353", "= " + channelName + " :" + memberLine);
+	reply = ReplyBuilder::numeric (client, "353", channelName + " :" + memberLine);
 	result.addReply (fd, reply);
 	reply = ReplyBuilder::numeric (client, "366", channelName);
 	result.addReply (fd, reply);

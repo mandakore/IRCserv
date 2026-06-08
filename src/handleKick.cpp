@@ -10,7 +10,7 @@ void CommandDispatcher::_kickSingleTarget (int fd, Client &client, const std::st
 										   ServerState &state, CommandResult &result) {
 	std::string reply;
 	if (nick.empty ()) {
-		reply = ReplyBuilder::numeric (client, "401", "");
+		reply = ReplyBuilder::numeric (client, "411", "KICK");
 		result.addReply (fd, reply);
 		return;
 	}
@@ -80,7 +80,7 @@ CommandResult CommandDispatcher::_handleKick (int fd, const Message &msg, Server
 	if (msg.hasParam (2))
 		reason = msg.getSingleParam (2);
 	if (reason.empty ())
-		reason = "Default Msg";
+		reason = client->getNickName ();
 	for (size_t i = 0; i < nicks.size (); ++i) {
 		_kickSingleTarget (fd, *client, channelName, nicks[i], reason, state, result);
 	}
