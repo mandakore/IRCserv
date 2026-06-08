@@ -32,7 +32,7 @@ CommandResult CommandDispatcher::_handlePass (int fd, const Message &msg, Server
 	client->acceptPassword ();
 	if (client->tryRegister ()) {
 		reply = ReplyBuilder::numeric (*client, "001",
-									   client->getNickname () + "!" + client->getUsername ());
+									   client->getNickname () + "!" + client->getUserName ());
 		result.addReply (fd, reply);
 	}
 	return result;

@@ -65,23 +65,3 @@ void Client::setAsRegistered () {
 	this->_registered = true;
 	return;
 }
-// Forbidden OCF Functions
-//
-// Client::Client()
-//{
-// }
-//
-// Client::Client(const Client& src)
-//{
-// }
-//
-// Client&				Client::operator=(const Client& src)
-//{
-//	this->_socketFd = src._socketFd;
-//	this->_username = src._username;
-//	this->_nickname = src._nickname;
-//	this->_realname = src._realname;
-//	this->_passAccepted = src._passAccepted;
-//	this->_registered = src._registered;
-//	return *this;
-// }

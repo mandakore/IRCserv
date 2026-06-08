@@ -54,13 +54,13 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 			return result;
 		}
 	}
-	if (!state.updateNickName (*client, nick)) {
+	if (!state.updateNickname (*client, nick)) {
 		reply = ReplyBuilder::numeric (*client, "433", nick);
 		result.addReply (fd, reply);
 		return result;
 	}
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", nick + "!" + client->getUsername ());
+		reply = ReplyBuilder::numeric (*client, "001", nick + "!" + client->getUserName ());
 		result.addReply (fd, reply);
 	}
 	return result;

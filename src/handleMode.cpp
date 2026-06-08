@@ -183,8 +183,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		std::string broadcastMsg = ReplyBuilder::mode (*client, target, fullModeStr);
 		_broadcastToChannel (result, *channel, broadcastMsg, NULL);
 	}
-}
-return result;
+	return result;
 }
 
 // MODE <your nick>|<channel> [<mode> [<mode parameters>]]
