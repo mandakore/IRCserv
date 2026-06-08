@@ -9,7 +9,7 @@
 #include "ServerState.hpp"
 
 const std::string CommandDispatcher::cmds[CommandDispatcher::CMD_COUNT] = {
-	"INVALID", "PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE"};
+	"INVALID", "PASS", "NICK", "USER", "JOIN", "PRIVMSG", "KICK", "INVITE", "TOPIC", "MODE", "PING"};
 
 CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerState &state) {
 	std::string cmdName = msg.getCommand ();
