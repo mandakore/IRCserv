@@ -1,6 +1,93 @@
-#include <sstream>
-#include "ReplyBuilder.hpp"
 #include "Client.hpp"
+#include "ReplyBuilder.hpp"
+
+std::string ReplyBuilder::numeric (const std::string &target, const std::string &num,
+								   const std::string &msg) {
+	std::string numericMsg = getNumericMessage (num);
+	if (numericMsg == MSG_UNKNOWNNUMERIC)
+		return "";
+	std::string validTarget = target;
+	if (validTarget.empty ())
+		validTarget = "*";
+	std::string reply = ":ircServ " + num + " " + validTarget;
+	if (!msg.empty ())
+		reply += (" " + msg);
+	if (!numericMsg.empty ())
+		reply += (" " + numericMsg);
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::numeric (const Client &client, const std::string &num,
+								   const std::string &msg) {
+	std::string target = getValidTargetName (client);
+	std::string reply = numeric (target, num, msg);
+	return reply;
+}
+
+std::string ReplyBuilder::join (const Client &client, const std::string &channel) {
+	std::string reply = buildPrefix (client);
+	reply += " JOIN ";
+	reply += channel;
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::privMsg (const Client &from, const std::string &to,
+								   const std::string &msg) {
+	std::string reply = buildPrefix (from);
+	reply += " PRIVMSG ";
+	reply += to;
+	if (!msg.empty ())
+		reply += (" :" + msg);
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::kick (const Client &opUser, const Client &target,
+								const std::string &channel, const std::string &reason) {
+	std::string reply = buildPrefix (opUser);
+	reply += " KICK ";
+	reply += channel;
+	reply += " ";
+	reply += getValidTargetName (target);
+	if (!reason.empty ()) {
+		reply += " :";
+		reply += reason;
+	}
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::invite (const Client &opUser, const Client &target,
+								  const std::string &channel) {
+	std::string reply = buildPrefix (opUser);
+	reply += " INVITE ";
+	reply += getValidTargetName (target);
+	reply += (" " + channel);
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::topic (const Client &opUser, const std::string &channel,
+								 const std::string &topic) {
+	std::string reply = buildPrefix (opUser);
+	reply += " TOPIC ";
+	reply += channel;
+	reply += (" :" + topic);
+	reply += "\r\n";
+	return reply;
+}
+
+std::string ReplyBuilder::mode (const Client &opUser, const std::string &channel,
+								const std::string &modeStr) {
+	std::string reply = buildPrefix (opUser);
+	reply += " MODE ";
+	reply += channel;
+	reply += (" " + modeStr);
+	reply += "\r\n";
+	return reply;
+}
 
 // Numeric Reply messages
 const std::string ReplyBuilder::MSG_WELCOME = ":Welcome to the ircServ"; // 001
@@ -36,7 +123,7 @@ const std::string ReplyBuilder::MSG_CHANOPRIVSNEEDED = ":You're not channel oper
 const std::string ReplyBuilder::MSG_UNKNOWNNUMERIC = "!!UnknownNumericCode!!";
 
 std::string ReplyBuilder::getValidTargetName (const Client &target) {
-	std::string nick = target.getNickname ();
+	std::string nick = target.getNickName ();
 	if (nick.empty ())
 		nick = "*";
 	return nick;
@@ -104,10 +191,10 @@ std::string ReplyBuilder::getNumericMessage (const std::string &num) {
 }
 
 std::string ReplyBuilder::buildPrefix (const Client &client) {
-	std::string nick = client.getNickname ();
+	std::string nick = client.getNickName ();
 	if (nick.empty ())
 		nick = "*";
-	std::string user = client.getUsername ();
+	std::string user = client.getUserName ();
 	if (user.empty ())
 		user = "unknown";
 	std::string prefix = ":" + nick + "!" + user + "@ircServ";
