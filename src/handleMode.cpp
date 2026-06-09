@@ -1,5 +1,6 @@
 #include <cctype>
 #include <set>
+#include <cstdlib>
 #include "Channel.hpp"
 #include "ChannelModes.hpp"
 #include "Client.hpp"
