@@ -1,29 +1,9 @@
 #include "Channel.hpp"
 
-Channel::Channel () {
-}
-
-Channel::Channel (const Channel &src)
-	: _name (src._name), _members (src._members), _operators (src._operators),
-	  _invited (src._invited), _topic (src._topic), _modes (src._modes) {
-}
-
 Channel::Channel (const std::string &name) : _name (name), _topic ("") {
 }
 
 Channel::~Channel () {
-}
-
-Channel &Channel::operator= (const Channel &other) {
-	if (this != &other) {
-		_name = other._name;
-		_topic = other._topic;
-		_members = other._members;
-		_operators = other._operators;
-		_invited = other._invited;
-		_modes = other._modes;
-	}
-	return *this;
 }
 
 const std::string &Channel::getChannelName () const {

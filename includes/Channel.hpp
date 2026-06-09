@@ -10,13 +10,8 @@ class Client;
 class Channel {
 public:
 	// Constructor&Destructor
-	Channel ();
 	Channel (const Channel &src);
-	Channel (const std::string &name);
 	~Channel ();
-
-	// Overload Operator
-	Channel &operator= (const Channel &src);
 
 	// Functions
 	// Getter
@@ -45,10 +40,18 @@ public:
 	bool isInvitedMember (const Client *target) const;
 
 private:
+	// Channel Values
 	std::string _name;
+	std::string _topic;
+	ChannelModes _modes;
+
+	// Member Lists
 	std::set<Client *> _members;
 	std::set<Client *> _operators;
 	std::set<Client *> _invited;
-	std::string _topic;
-	ChannelModes _modes;
+
+	// Forbidden OCF Functions
+	Channel ();
+	Channel (const std::string &name);
+	Channel &operator= (const Channel &src);
 };
