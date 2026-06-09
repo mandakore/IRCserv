@@ -10,7 +10,7 @@
 
 const std::string CommandDispatcher::cmds[CommandDispatcher::CMD_COUNT] = {
 	"INVALID", "PASS",	 "NICK",  "USER", "JOIN", "PRIVMSG",
-	"KICK",	   "INVITE", "TOPIC", "MODE", "PING"};
+	"KICK",	   "INVITE", "TOPIC", "MODE", "PING", "CAP"};
 
 CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerState &state) {
 	std::string cmdName = msg.getCommand ();
@@ -36,6 +36,8 @@ CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerSta
 		return _handleMode (fd, msg, state);
 	case CMD_PING:
 		return _handlePing (fd, msg, state);
+	case CMD_CAP:
+		return _handleCap (fd, msg, state);
 	// Add IRSSI Commands
 	default:
 		return _handleInvalidCommand (fd, msg, state);
