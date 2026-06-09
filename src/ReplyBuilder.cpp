@@ -90,7 +90,10 @@ std::string ReplyBuilder::mode (const Client &opUser, const std::string &channel
 }
 
 // Numeric Reply messages
-const std::string ReplyBuilder::MSG_WELCOME = ":Welcome to the ircServ"; // 001
+const std::string ReplyBuilder::MSG_WELCOME = ":Welcome to the ircServ"; 					 // 001
+const std::string ReplyBuilder::MSG_YOURHOST = ":Your host is ircServ, running version 1.0"; // 002
+const std::string ReplyBuilder::MSG_CREATED = ":This server was created 2026-??-??"; 		 // 003
+const std::string ReplyBuilder::MSG_MYINFO = "ircServ 1.0"; 								 // 004
 const std::string ReplyBuilder::MSG_CHANNELMODEIS = "";					 // 324
 const std::string ReplyBuilder::MSG_NOTOPIC = ":No topic is set";		 // 331
 const std::string ReplyBuilder::MSG_TOPIC = "";							 // 332
@@ -132,6 +135,12 @@ std::string ReplyBuilder::getValidTargetName (const Client &target) {
 std::string ReplyBuilder::getNumericMessage (const std::string &num) {
 	if (num == "001")
 		return ReplyBuilder::MSG_WELCOME;
+	else if (num == "002")
+		return ReplyBuilder::MSG_YOURHOST;
+	else if (num == "003")
+		return ReplyBuilder::MSG_CREATED;
+	else if (num == "004")
+		return ReplyBuilder::MSG_MYINFO;
 	else if (num == "324")
 		return ReplyBuilder::MSG_CHANNELMODEIS;
 	else if (num == "331")

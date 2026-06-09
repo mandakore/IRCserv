@@ -142,11 +142,11 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					Client *targetClient = state.getClientByNick (modeParam);
 					if (!targetClient) {
 						std::string reply =
-							ReplyBuilder::numeric (*client, "401", targetClient->getNickName ());
+							ReplyBuilder::numeric (*client, "401", modeParam);
 						result.addReply (fd, reply);
-						return result;
+						break;
 					}
-					if (targetClient && channel->isChannelMember (targetClient)) {
+					if (channel->isChannelMember (targetClient)) {
 						if (adding) {
 							if (channel->addOperator (targetClient))
 								modeChanged = true;
@@ -156,7 +156,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 						}
 					} else {
 						std::string reply = ReplyBuilder::numeric (
-							*client, "441", targetClient->getNickName () + " " + target);
+							*client, "441", modeParam + " " + target);
 						result.addReply (fd, reply);
 					}
 				}

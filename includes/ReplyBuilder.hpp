@@ -30,6 +30,9 @@ private:
 	// Numeric Messages Definition // Format: Code / arg:"Required param puttern <Optional param>"
 	// Numeric Reply Messages
 	static const std::string MSG_WELCOME;		// 001 arg:""
+	static const std::string MSG_YOURHOST;		// 002 arg:""
+	static const std::string MSG_CREATED;		// 003 arg:""
+	static const std::string MSG_MYINFO;		// 004 arg:""
 	static const std::string MSG_CHANNELMODEIS; // 324 arg:"channel mode <modeParams>"
 	static const std::string MSG_NOTOPIC;		// 331 arg:"channel"
 	static const std::string MSG_TOPIC;			// 332 arg:"channel :topic"
