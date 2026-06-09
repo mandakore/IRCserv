@@ -95,7 +95,7 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 			}
 		}
 		size_t limit = target->getModes ().getMemberLimit ();
-		if (limit >= 0 && target->getMemberCount () >= limit) {
+		if (limit > 0 && target->getMemberCount () >= limit) {
 			reply = ReplyBuilder::numeric (client, "471", channel);
 			result.addReply (fd, reply);
 			return;
