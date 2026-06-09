@@ -36,7 +36,7 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 		return result;
 	std::string reply;
 	if (msg.getParamCount () < 1) {
-		reply = ReplyBuilder::numeric (*client, "431", "NICK");
+		reply = ReplyBuilder::numeric (*client, "431", "");
 		result.addReply (fd, reply);
 		return result;
 	}
@@ -54,14 +54,16 @@ CommandResult CommandDispatcher::_handleNick (int fd, const Message &msg, Server
 			return result;
 		}
 	}
-	if (!state.updateNickName (*client, nick)) {
+	if (!state.updateNickname (*client, nick)) {
 		reply = ReplyBuilder::numeric (*client, "433", nick);
 		result.addReply (fd, reply);
 		return result;
 	}
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", "");
-		result.addReply (fd, reply);
+		result.addReply (fd, ReplyBuilder::numeric (*client, "001", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "002", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "003", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "004", ""));
 	}
 	return result;
 }

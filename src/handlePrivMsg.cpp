@@ -54,7 +54,7 @@ CommandResult CommandDispatcher::_handlePrivMsg (int fd, const Message &msg, Ser
 		return result;
 	}
 	if (msg.getParamCount () < 2 || msg.getSingleParam (1).empty ()) {
-		reply = ReplyBuilder::numeric (*client, "412", "PRIVMSG");
+		reply = ReplyBuilder::numeric (*client, "412", "");
 		result.addReply (fd, reply);
 		return result;
 	}

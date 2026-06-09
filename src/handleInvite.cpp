@@ -34,11 +34,6 @@ CommandResult CommandDispatcher::_handleInvite (int fd, const Message &msg, Serv
 		return result;
 	}
 	std::string nick = msg.getSingleParam (0);
-	if (nick.empty ()) {
-		reply = ReplyBuilder::numeric (*client, "401", "INVITE");
-		result.addReply (fd, reply);
-		return result;
-	}
 	Client *target = state.getClientByNick (nick);
 	if (target == NULL) {
 		reply = ReplyBuilder::numeric (*client, "401", nick);

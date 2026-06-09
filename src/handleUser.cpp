@@ -20,15 +20,17 @@ CommandResult CommandDispatcher::_handleUser (int fd, const Message &msg, Server
 		return result;
 	}
 	if (client->isRegistered ()) {
-		reply = ReplyBuilder::numeric (*client, "462", "USER");
+		reply = ReplyBuilder::numeric (*client, "462", "");
 		result.addReply (fd, reply);
 		return result;
 	}
 	client->setUserName (msg.getSingleParam (0));
 	client->setRealName (msg.getSingleParam (3));
 	if (client->tryRegister ()) {
-		reply = ReplyBuilder::numeric (*client, "001", "");
-		result.addReply (fd, reply);
+		result.addReply (fd, ReplyBuilder::numeric (*client, "001", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "002", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "003", ""));
+		result.addReply (fd, ReplyBuilder::numeric (*client, "004", ""));
 	}
 	return result;
 }

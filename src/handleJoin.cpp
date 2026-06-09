@@ -53,9 +53,9 @@ void CommandDispatcher::_notifyMembers (int fd, const Client &client, const Chan
 	}
 	std::string reply;
 	std::string channelName = channel.getChannelName ();
-	reply = ReplyBuilder::numeric (client, "353", "= " + channelName + " :" + memberLine);
+	reply = ReplyBuilder::numeric (client, "353", channelName + " :" + memberLine);
 	result.addReply (fd, reply);
-	reply = ReplyBuilder::numeric (client, "366", channelName + " :End of /NAMES list");
+	reply = ReplyBuilder::numeric (client, "366", channelName);
 	result.addReply (fd, reply);
 	return;
 }
@@ -94,8 +94,8 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 				return;
 			}
 		}
-		int limit = target->getModes ().getMemberLimit ();
-		if (limit >= 0 && target->getMemberCount () >= limit) {
+		size_t limit = target->getModes ().getMemberLimit ();
+		if (limit > 0 && target->getMemberCount () >= limit) {
 			reply = ReplyBuilder::numeric (client, "471", channel);
 			result.addReply (fd, reply);
 			return;

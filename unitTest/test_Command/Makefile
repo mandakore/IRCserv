@@ -1,12 +1,10 @@
-NAME		= ircserv
+NAME		= test_Command
 CXX			= c++
 CXXFLAGS	= -Wall -Wextra -Werror -std=c++98 -pedantic -I$(INC_DIR)
 
-INC_DIR		= includes/
-SRCS_DIR	= src/
-SRCS		= $(SRCS_DIR)main.cpp \
-			  $(SRCS_DIR)Banner.cpp \
-			  $(SRCS_DIR)Server.cpp \
+INC_DIR		= ../../includes/
+SRCS_DIR	= ../../src/
+SRCS		= test_Command.cpp \
 			  $(SRCS_DIR)Channel.cpp \
 			  $(SRCS_DIR)ChannelModes.cpp \
 			  $(SRCS_DIR)Client.cpp \
@@ -25,11 +23,8 @@ SRCS		= $(SRCS_DIR)main.cpp \
 			  $(SRCS_DIR)handlePrivMsg.cpp \
 			  $(SRCS_DIR)handleTopic.cpp \
 			  $(SRCS_DIR)handleUser.cpp \
-			  $(SRCS_DIR)handlePing.cpp \
-			  $(SRCS_DIR)handleCap.cpp \
 
 OBJS		= $(SRCS:.cpp=.o)
-
 
 all: $(NAME)
 
@@ -45,18 +40,4 @@ fclean: clean
 
 re: fclean all
 
-TEST_PORT = 6667
-TEST_PASS = pass
-
-test: all
-	@echo "Starting server for testing on port $(TEST_PORT)..."
-# 	@./$(NAME) $(TEST_PORT) $(TEST_PASS) > /dev/null 2>&1 & echo $$! > server.pid
-	@./$(NAME) $(TEST_PORT) $(TEST_PASS) > server.log 2>&1 & echo $$! > server.pid
-	@sleep 1
-	@echo "Running Python tests..."
-	@python3 IRCservTester/test.py || (kill `cat server.pid` && rm server.pid && exit 1)
-	@echo "Stopping server..."
-	@kill `cat server.pid` && rm server.pid
-	@echo "All tests passed successfully!"
-
-.PHONY: all clean fclean re test
+.PHONY: all clean fclean re

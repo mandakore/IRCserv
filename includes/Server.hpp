@@ -16,6 +16,10 @@
 #include <cstring>
 #include <map>
 #include "Debug.hpp"
+#include "ServerState.hpp"
+#include "Parser.hpp"
+#include "CommandDispatcher.hpp"
+#include "CommandResult.hpp"
 
 class Server {
 private:
@@ -27,6 +31,7 @@ private:
 	// int _maxClients;
 	std::map<int, std::string> _recvBuffers;
 	std::map<int, std::string> _sendBuffers;
+	ServerState _state;
 
 	void setupSocket ();
 	void acceptNewClient ();
