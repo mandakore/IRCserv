@@ -28,6 +28,7 @@ private:
 		CMD_TOPIC,
 		CMD_MODE,
 		CMD_PING,
+		CMD_CAP,
 		CMD_COUNT
 	};
 
@@ -71,6 +72,7 @@ private:
 	static CommandResult _handleTopic (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handleMode (int fd, const Message &msg, ServerState &state);
 	static CommandResult _handlePing (int fd, const Message &msg, ServerState &state);
+	static CommandResult _handleCap (int fd, const Message &msg, ServerState &state);
 
 	// Forbidden OCF Functions
 	CommandDispatcher ();
