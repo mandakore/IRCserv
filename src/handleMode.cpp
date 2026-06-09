@@ -1,5 +1,6 @@
 #include <cctype>
 #include <set>
+#include <cstdlib>
 #include "Channel.hpp"
 #include "ChannelModes.hpp"
 #include "Client.hpp"
@@ -43,7 +44,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		if (channel->getModes ().getMemberLimit () > 0) {
 			currentModes += "l";
 		}
-		std::string reply = ReplyBuilder::numeric (*client, "324", target + ":" + currentModes);
+		std::string reply = ReplyBuilder::numeric (*client, "324", target + " :" + currentModes);
 		result.addReply (fd, reply);
 		return result;
 	}
@@ -141,11 +142,12 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					modeParam = msg.getSingleParam (paramIndex++);
 					Client *targetClient = state.getClientByNick (modeParam);
 					if (!targetClient) {
-						std::string reply = ReplyBuilder::numeric (*client, "401", target);
+						std::string reply =
+							ReplyBuilder::numeric (*client, "401", modeParam);
 						result.addReply (fd, reply);
-						return result;
+						break;
 					}
-					if (targetClient && channel->isChannelMember (targetClient)) {
+					if (channel->isChannelMember (targetClient)) {
 						if (adding) {
 							if (channel->addOperator (targetClient))
 								modeChanged = true;
@@ -154,14 +156,17 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 								modeChanged = true;
 						}
 					} else {
-						std::string reply = ReplyBuilder::numeric (*client, "441", target);
+						std::string reply = ReplyBuilder::numeric (
+							*client, "441", modeParam + " " + target);
 						result.addReply (fd, reply);
 					}
 				}
 				break;
 
 			default:
-				std::string reply = ReplyBuilder::numeric (*client, "472", "MODE");
+				std::string modeChar = " ";
+				modeChar[0] = c;
+				std::string reply = ReplyBuilder::numeric (*client, "472", modeChar);
 				result.addReply (fd, reply);
 				break;
 			}
@@ -183,8 +188,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		std::string broadcastMsg = ReplyBuilder::mode (*client, target, fullModeStr);
 		_broadcastToChannel (result, *channel, broadcastMsg, NULL);
 	}
-}
-return result;
+	return result;
 }
 
 // MODE <your nick>|<channel> [<mode> [<mode parameters>]]

@@ -47,6 +47,6 @@ CommandResult CommandDispatcher::_handleTopic (int fd, const Message &msg, Serve
 	std::string newTopic = msg.getSingleParam (1);
 	channel->setChannelTopic (newTopic);
 	reply = ReplyBuilder::topic (*client, channelName, newTopic);
-	_broadcastToChannel (result, channel, reply, NULL);
+	_broadcastToChannel (result, *channel, reply, NULL);
 	return result;
 }

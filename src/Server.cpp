@@ -1,7 +1,7 @@
 #include "Server.hpp"
 
 Server::Server (int port, std::string &password)
-	: _port (port), _password (password), _serverFd (-1) {
+	: _port (port), _password (password), _serverFd (-1), _state (password) {
 	DEBUG ("コンストラクタ");
 	setupSocket ();
 }
@@ -77,6 +77,8 @@ void Server::acceptNewClient () {
 
 		_recvBuffers[clientFd] = "";
 		_sendBuffers[clientFd] = "";
+
+		_state.addNewClient (clientFd);
 
 		std::cout << "New client connected. FD: " << clientFd << std::endl;
 	}
@@ -169,8 +171,22 @@ void Server::queueResponse (int clientFd, const std::string &message) {
 
 void Server::processMessage (int clientFd, const std::string &message) {
 	std::cout << "[FD " << clientFd << " COMMAND]: " << message << std::endl;
-	std::string reply = "Server received: " + message + "\r\n";
-	queueResponse (clientFd, reply);
+
+	Message msg = Parser::parse (message);
+	if (msg.getCommand ().empty ())
+		return;
+
+	CommandResult result = CommandDispatcher::dispatch (clientFd, msg, _state);
+
+	if (result.shouldDisconnect ()) {
+		disconnectClient (clientFd);
+		return;
+	}
+
+	const std::vector<t_reply> &replies = result.getReplies ();
+	for (size_t i = 0; i < replies.size (); ++i) {
+		queueResponse (replies[i].fd, replies[i].reply);
+	}
 }
 
 void Server::disconnectClient (int clientFd) {
@@ -181,14 +197,14 @@ void Server::disconnectClient (int clientFd) {
 	_recvBuffers.erase (clientFd);
 	_sendBuffers.erase (clientFd);
 
+	_state.removeClient (clientFd);
+
 	for (std::vector<struct pollfd>::iterator it = _pollfds.begin (); it != _pollfds.end (); ++it) {
 		if (it->fd == clientFd) {
 			_pollfds.erase (it);
 			break;
 		}
 	}
-
-	// TODO:ユーザー退出処理
 }
 
 void Server::sendData (int clientFd) {

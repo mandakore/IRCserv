@@ -93,20 +93,38 @@ bool Channel::removeInvitedMember (Client *target) {
 }
 
 bool Channel::removeClient (Client *target) {
-	if (!removeMember (target) || !removeOperator (target) || !removeInvitedMember (target))
-		return false;
-	return true;
+	bool removed = false;
+	if (removeMember (target))
+		removed = true;
+	if (removeOperator (target))
+		removed = true;
+	if (removeInvitedMember (target))
+		removed = true;
+	return removed;
 }
 
 // Util Functions
 bool Channel::isChannelMember (const Client *target) const {
-	return _members.find (target) != _members.end ();
+	for (std::set<Client *>::const_iterator it = _members.begin (); it != _members.end (); ++it) {
+		if (*it == target)
+			return true;
+	}
+	return false;
 }
 
 bool Channel::isOperator (const Client *target) const {
-	return _operators.find (target) != _operators.end ();
+	for (std::set<Client *>::const_iterator it = _operators.begin (); it != _operators.end ();
+		 ++it) {
+		if (*it == target)
+			return true;
+	}
+	return false;
 }
 
 bool Channel::isInvitedMember (const Client *target) const {
-	return _invited.find (target) != _invited.end ();
+	for (std::set<Client *>::const_iterator it = _invited.begin (); it != _invited.end (); ++it) {
+		if (*it == target)
+			return true;
+	}
+	return false;
 }
