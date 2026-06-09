@@ -92,7 +92,7 @@ std::string ReplyBuilder::mode (const Client &opUser, const std::string &channel
 // Numeric Reply messages
 const std::string ReplyBuilder::MSG_WELCOME = ":Welcome to the ircServ"; 					 // 001
 const std::string ReplyBuilder::MSG_YOURHOST = ":Your host is ircServ, running version 1.0"; // 002
-const std::string ReplyBuilder::MSG_CREATED = ":This server was created 2026-??-??"; 		 // 003
+const std::string ReplyBuilder::MSG_CREATED = ":This server was created 2026-..-.."; 		 // 003
 const std::string ReplyBuilder::MSG_MYINFO = "ircServ 1.0"; 								 // 004
 const std::string ReplyBuilder::MSG_CHANNELMODEIS = "";					 // 324
 const std::string ReplyBuilder::MSG_NOTOPIC = ":No topic is set";		 // 331
