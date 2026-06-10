@@ -10,7 +10,7 @@ class Client;
 class Channel {
 public:
 	// Constructor&Destructor
-	Channel (const Channel &src);
+	Channel (const std::string &name);
 	~Channel ();
 
 	// Functions
@@ -52,6 +52,6 @@ private:
 
 	// Forbidden OCF Functions
 	Channel ();
-	Channel (const std::string &name);
+	Channel (const Channel &src);
 	Channel &operator= (const Channel &src);
 };

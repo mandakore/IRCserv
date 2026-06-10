@@ -41,7 +41,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		if (channel->getModes ().isChannelProtected ()) {
 			currentModes += "k";
 		}
-		if (channel->getModes ().getMemberLimit () > 0) {
+		if (channel->getModes ().isMemberLimited ()) {
 			currentModes += "l";
 		}
 		std::string reply = ReplyBuilder::numeric (*client, "324", target + " :" + currentModes);
@@ -130,7 +130,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 						}
 					}
 				} else {
-					if (channel->getModes ().getMemberLimit () > 0) {
+					if (channel->getModes ().isMemberLimited ()) {
 						channel->getModes ().unsetMemberLimit ();
 						modeChanged = true;
 					}
@@ -142,8 +142,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 					modeParam = msg.getSingleParam (paramIndex++);
 					Client *targetClient = state.getClientByNick (modeParam);
 					if (!targetClient) {
-						std::string reply =
-							ReplyBuilder::numeric (*client, "401", modeParam);
+						std::string reply = ReplyBuilder::numeric (*client, "401", modeParam);
 						result.addReply (fd, reply);
 						break;
 					}
@@ -156,8 +155,8 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 								modeChanged = true;
 						}
 					} else {
-						std::string reply = ReplyBuilder::numeric (
-							*client, "441", modeParam + " " + target);
+						std::string reply =
+							ReplyBuilder::numeric (*client, "441", modeParam + " " + target);
 						result.addReply (fd, reply);
 					}
 				}

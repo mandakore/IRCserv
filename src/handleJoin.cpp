@@ -94,11 +94,13 @@ void CommandDispatcher::_joinSingleChannel (int fd, Client &client, const std::s
 				return;
 			}
 		}
-		size_t limit = target->getModes ().getMemberLimit ();
-		if (limit > 0 && target->getMemberCount () >= limit) {
-			reply = ReplyBuilder::numeric (client, "471", channel);
-			result.addReply (fd, reply);
-			return;
+		if (target->getModes ().isMemberLimited ()) {
+			size_t limit = target->getModes ().getMemberLimit ();
+			if (target->getMemberCount () >= limit) {
+				reply = ReplyBuilder::numeric (client, "471", channel);
+				result.addReply (fd, reply);
+				return;
+			}
 		}
 	}
 	if (!target->addMember (&client))
