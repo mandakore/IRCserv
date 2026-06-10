@@ -2,21 +2,6 @@
 #include <cctype>
 #include <algorithm>
 
-Parser::Parser () {
-}
-
-Parser::Parser (const Parser &src) {
-	(void)src;
-}
-
-Parser::~Parser () {
-}
-
-Parser &Parser::operator= (const Parser &src) {
-	(void)src;
-	return *this;
-}
-
 static std::string trim (const std::string &s) {
 	const std::string::size_type start = s.find_first_not_of (' ');
 	if (start == std::string::npos)

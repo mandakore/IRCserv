@@ -5,17 +5,14 @@ class ChannelModes {
 public:
 	// Constructor&Destructor
 	ChannelModes ();
-	ChannelModes (const ChannelModes &src);
 	~ChannelModes ();
-
-	// Overload Operator
-	ChannelModes &operator= (const ChannelModes &src);
 
 	// Functions
 	// Getters
 	bool isInviteOnly () const;
 	bool isTopicRestricted () const;
 	bool isChannelProtected () const;
+	bool isMemberLimited () const;
 
 	int getMemberLimit () const;
 	bool checkChannelPassword (const std::string &input) const;
@@ -33,9 +30,17 @@ public:
 	void unsetChannelProtected ();
 
 private:
+	// Flags
 	bool _inviteOnly;
 	bool _topicRestricted;
 	bool _channelProtected;
-	int _maxMember;
+	bool _memberLimited;
+
+	// Values
+	size_t _maxMember;
 	std::string _channelPass;
+
+	// Forbidden OCF Functions
+	ChannelModes (const ChannelModes &src);
+	ChannelModes &operator= (const ChannelModes &src);
 };

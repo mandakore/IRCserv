@@ -1,28 +1,11 @@
 #include "ChannelModes.hpp"
 
 ChannelModes::ChannelModes ()
-	: _inviteOnly (false), _topicRestricted (false), _channelProtected (false), _maxMember (-1),
+	: _inviteOnly (false), _topicRestricted (false), _channelProtected (false), _maxMember (0),
 	  _channelPass ("") {
 }
 
-ChannelModes::ChannelModes (const ChannelModes &src)
-	: _inviteOnly (src._inviteOnly), _topicRestricted (src._topicRestricted),
-	  _channelProtected (src._channelProtected), _maxMember (src._maxMember),
-	  _channelPass (src._channelPass) {
-}
-
 ChannelModes::~ChannelModes () {
-}
-
-ChannelModes &ChannelModes::operator= (const ChannelModes &src) {
-	if (this != &src) {
-		_inviteOnly = src._inviteOnly;
-		_topicRestricted = src._topicRestricted;
-		_channelProtected = src._channelProtected;
-		_maxMember = src._maxMember;
-		_channelPass = src._channelPass;
-	}
-	return *this;
 }
 
 bool ChannelModes::isInviteOnly () const {
@@ -35,6 +18,10 @@ bool ChannelModes::isTopicRestricted () const {
 
 bool ChannelModes::isChannelProtected () const {
 	return _channelProtected;
+}
+
+bool ChannelModes::isMemberLimited () const {
+	return _memberLimited;
 }
 
 int ChannelModes::getMemberLimit () const {
@@ -58,6 +45,7 @@ void ChannelModes::setTopicRestricted () {
 }
 
 void ChannelModes::setMemberLimit (int limit) {
+	_memberLimited = true;
 	_maxMember = limit;
 }
 
@@ -76,7 +64,7 @@ void ChannelModes::unsetTopicRestricted () {
 }
 
 void ChannelModes::unsetMemberLimit () {
-	_maxMember = -1;
+	_memberLimited = false;
 }
 
 void ChannelModes::unsetChannelProtected () {
