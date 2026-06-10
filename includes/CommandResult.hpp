@@ -25,6 +25,7 @@ public:
 	bool shouldDisconnect () const;
 
 private:
+	// Values
 	std::vector<t_reply> _replies;
 	bool _disconnect;
 };
