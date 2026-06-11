@@ -53,6 +53,7 @@ private:
 	static const std::string MSG_USERNOTINCHANNEL;	// 441 arg:"nick channel"
 	static const std::string MSG_NOTONCHANNEL;		// 442 arg:"channel"
 	static const std::string MSG_USERONCHANNEL;		// 443 arg:"nick channel"
+	static const std::string MSG_NOTREGISTERED;		// 451 arg:"command"
 	static const std::string MSG_NEEDMOREPARAMS;	// 461 arg:"command"
 	static const std::string MSG_ALREADYREGISTERED; // 462 arg:""
 	static const std::string MSG_PASSWDMISMATCH;	// 464 arg:""

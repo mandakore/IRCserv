@@ -148,3 +148,8 @@ bool ServerState::isCorrectPassword (const std::string &pass) const {
 	else
 		return false;
 }
+
+const std::map<std::string, Channel *> &ServerState::getChannels () const {
+	return _channels;
+}
+
