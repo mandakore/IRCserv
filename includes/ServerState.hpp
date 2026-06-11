@@ -24,6 +24,7 @@ public:
 	Channel *ensureChannel (const std::string &name);
 	bool removeChannelIfEmpty (const std::string &name);
 	Channel *findChannel (const std::string &name) const;
+	const std::map<std::string, Channel *> &getChannels () const;
 
 	// Server
 	bool isCorrectPassword (const std::string &pass) const;

@@ -44,7 +44,7 @@ CommandResult CommandDispatcher::_handleMode (int fd, const Message &msg, Server
 		if (channel->getModes ().isMemberLimited ()) {
 			currentModes += "l";
 		}
-		std::string reply = ReplyBuilder::numeric (*client, "324", target + " :" + currentModes);
+		std::string reply = ReplyBuilder::numeric (*client, "324", target + " " + currentModes);
 		result.addReply (fd, reply);
 		return result;
 	}

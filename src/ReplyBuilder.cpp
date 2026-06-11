@@ -113,6 +113,7 @@ const std::string ReplyBuilder::MSG_NICKNAMEINUSE = ":Nickname is already in use
 const std::string ReplyBuilder::MSG_USERNOTINCHANNEL = ":They aren't on that channel";		 // 441
 const std::string ReplyBuilder::MSG_NOTONCHANNEL = ":You're not on that channel";			 // 442
 const std::string ReplyBuilder::MSG_USERONCHANNEL = ":is already on channel";				 // 443
+const std::string ReplyBuilder::MSG_NOTREGISTERED = ":You have not registered";				 // 451
 const std::string ReplyBuilder::MSG_NEEDMOREPARAMS = ":Not enough parameters";				 // 461
 const std::string ReplyBuilder::MSG_ALREADYREGISTERED = ":Unauthorized command";			 // 462
 const std::string ReplyBuilder::MSG_PASSWDMISMATCH = ":Password incorrect";					 // 464
@@ -177,6 +178,8 @@ std::string ReplyBuilder::getNumericMessage (const std::string &num) {
 		return ReplyBuilder::MSG_NOTONCHANNEL;
 	else if (num == "443")
 		return ReplyBuilder::MSG_USERONCHANNEL;
+	else if (num == "451")
+		return ReplyBuilder::MSG_NOTREGISTERED;
 	else if (num == "461")
 		return ReplyBuilder::MSG_NEEDMOREPARAMS;
 	else if (num == "462")
