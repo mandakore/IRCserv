@@ -1,8 +1,8 @@
 #include "ChannelModes.hpp"
 
 ChannelModes::ChannelModes ()
-	: _inviteOnly (false), _topicRestricted (false), _channelProtected (false), _maxMember (0),
-	  _channelPass ("") {
+	: _inviteOnly (false), _topicRestricted (false), _channelProtected (false),
+	  _memberLimited (false), _maxMember (0), _channelPass ("") {
 }
 
 ChannelModes::~ChannelModes () {

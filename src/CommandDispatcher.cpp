@@ -15,6 +15,17 @@ const std::string CommandDispatcher::cmds[CommandDispatcher::CMD_COUNT] = {
 CommandResult CommandDispatcher::dispatch (int fd, const Message &msg, ServerState &state) {
 	std::string cmdName = msg.getCommand ();
 	int cmdNumber = _cmdNameToNumber (CommandDispatcher::cmds, cmdName);
+
+	if (cmdNumber != CMD_PASS && cmdNumber != CMD_NICK && cmdNumber != CMD_USER &&
+	    cmdNumber != CMD_CAP && cmdNumber != CMD_INVALID) {
+		Client *client = state.getClientByFd (fd);
+		if (client != NULL && !client->isRegistered ()) {
+			CommandResult result;
+			result.addReply (fd, ReplyBuilder::numeric (*client, "451", cmdName));
+			return result;
+		}
+	}
+
 	switch (cmdNumber) {
 	case CMD_PASS:
 		return _handlePass (fd, msg, state);
