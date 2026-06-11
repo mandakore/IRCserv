@@ -148,9 +148,7 @@ void Server::ircLoop () {
 			if (!disconnected && (_pollfds[i].revents & POLLOUT)) {
 				sendData (clientFd);
 			}
-			if (!disconnected && clientFd != _serverFd) {
-				++i;
-			} else if (clientFd == _serverFd) {
+			if (!disconnected) {
 				++i;
 			}
 		}
@@ -178,14 +176,13 @@ void Server::processMessage (int clientFd, const std::string &message) {
 
 	CommandResult result = CommandDispatcher::dispatch (clientFd, msg, _state);
 
-	if (result.shouldDisconnect ()) {
-		disconnectClient (clientFd);
-		return;
-	}
-
 	const std::vector<t_reply> &replies = result.getReplies ();
 	for (size_t i = 0; i < replies.size (); ++i) {
 		queueResponse (replies[i].fd, replies[i].reply);
+	}
+
+	if (result.shouldDisconnect ()) {
+		disconnectClient (clientFd);
 	}
 }
 
