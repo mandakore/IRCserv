@@ -94,12 +94,15 @@ void Server::receiveData (int clientFd) {
 	ssize_t bytesRead = recv (clientFd, buffer, sizeof (buffer) - 1, 0);
 #endif
 
-	if (bytesRead <= 0) {
-		// 切断おrエラー
-		disconnectClient(clientFd);
-		// close (clientFd);
-		// _pollfds.erase (_pollfds.begin () + index);
-		// _recvBuffers.erase (clientFd);
+	if (bytesRead < 0) {
+		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
+			return;
+		}
+		disconnectClient (clientFd);
+		return;
+	} else if (bytesRead == 0) {
+		disconnectClient (clientFd);
+		return;
 	} else {
 		_recvBuffers[clientFd].append (buffer, bytesRead);
 
@@ -115,6 +118,9 @@ void Server::receiveData (int clientFd) {
 			_recvBuffers[clientFd].erase (0, pos + 1);
 
 			processMessage (clientFd, line);
+			if (_recvBuffers.find (clientFd) == _recvBuffers.end ()) {
+				return;
+			}
 		}
 	}
 }
@@ -235,6 +241,10 @@ void Server::sendData (int clientFd) {
 					break;
 				}
 			}
+		}
+	} else if (bytesSent < 0) {
+		if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
+			disconnectClient (clientFd);
 		}
 	}
 }
