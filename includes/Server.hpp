@@ -6,6 +6,7 @@
 #include <poll.h>
 #include <iostream>
 #include <vector>
+#include <cerrno>
 #include <fcntl.h>
 #include <unistd.h>
 #include <arpa/inet.h>
