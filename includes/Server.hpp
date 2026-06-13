@@ -16,6 +16,7 @@
 #include <string>
 #include <cstring>
 #include <map>
+#include <csignal>
 #include "Debug.hpp"
 #include "ServerState.hpp"
 #include "Parser.hpp"

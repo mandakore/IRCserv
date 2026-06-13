@@ -5,11 +5,20 @@
 
 #define BANNER 0
 
+volatile sig_atomic_t g_server_running = 1;
+
+void signalHandler(int signum) {
+	(void)signum;
+	g_server_running = 0;
+}
+
 int main (int argc, char **argv) {
 	if(argc != 3) {
 		std::cout << "./Usage: ./ircserv <port> <password>" << std::endl;
 		return 1;
 	}
+	signal(SIGINT, signalHandler);
+	signal(SIGQUIT, signalHandler);
 	try {
 		DEBUG("main debug test");
 		int port = std::atoi(argv[1]);
