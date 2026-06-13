@@ -94,12 +94,15 @@ void Server::receiveData (int clientFd) {
 	ssize_t bytesRead = recv (clientFd, buffer, sizeof (buffer) - 1, 0);
 #endif
 
-	if (bytesRead <= 0) {
-		// 切断おrエラー
-		disconnectClient(clientFd);
-		// close (clientFd);
-		// _pollfds.erase (_pollfds.begin () + index);
-		// _recvBuffers.erase (clientFd);
+	if (bytesRead < 0) {
+		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
+			return;
+		}
+		disconnectClient (clientFd);
+		return;
+	} else if (bytesRead == 0) {
+		disconnectClient (clientFd);
+		return;
 	} else {
 		_recvBuffers[clientFd].append (buffer, bytesRead);
 
@@ -115,6 +118,9 @@ void Server::receiveData (int clientFd) {
 			_recvBuffers[clientFd].erase (0, pos + 1);
 
 			processMessage (clientFd, line);
+			if (_recvBuffers.find (clientFd) == _recvBuffers.end ()) {
+				return;
+			}
 		}
 	}
 }
@@ -126,16 +132,11 @@ void Server::ircLoop () {
 		if (res < 0) {
 			throw std::runtime_error ("Poll failed.");
 		}
-		for (size_t i = 0; i < _pollfds.size (); /* インクリメントは下 */) {
+		for (size_t i = 0; i < _pollfds.size ();) {
 			int clientFd = _pollfds[i].fd;
 			bool disconnected = false;
 
-			// エラーまたは切断検知の (POLLERR, POLLHUP, POLLNVAL)
-			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL)) {
-				disconnectClient (clientFd);
-				disconnected = true;
-			}
-			else if (_pollfds[i].revents & POLLIN) {
+			if (_pollfds[i].revents & POLLIN) {
 				if (clientFd == _serverFd) {
 					acceptNewClient ();
 				} else {
@@ -147,6 +148,10 @@ void Server::ircLoop () {
 			}
 			if (!disconnected && (_pollfds[i].revents & POLLOUT)) {
 				sendData (clientFd);
+			}
+			if (!disconnected && (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))) {
+				disconnectClient (clientFd);
+				disconnected = true;
 			}
 			if (!disconnected) {
 				++i;
@@ -235,6 +240,10 @@ void Server::sendData (int clientFd) {
 					break;
 				}
 			}
+		}
+	} else if (bytesSent < 0) {
+		if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
+			disconnectClient (clientFd);
 		}
 	}
 }

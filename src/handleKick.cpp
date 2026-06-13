@@ -54,6 +54,7 @@ void CommandDispatcher::_kickSingleTarget (int fd, Client &client, const std::st
 		result.addReply (fd, reply);
 		return;
 	}
+	state.removeChannelIfEmpty (channelName);
 	return;
 }
 
