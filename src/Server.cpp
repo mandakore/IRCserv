@@ -1,5 +1,7 @@
 #include "Server.hpp"
 
+extern volatile sig_atomic_t g_server_running;
+
 Server::Server (int port, std::string &password)
 	: _port (port), _password (password), _serverFd (-1), _state (password) {
 	DEBUG ("コンストラクタ");
@@ -126,10 +128,14 @@ void Server::receiveData (int clientFd) {
 }
 
 void Server::ircLoop () {
-	while (1) {
+	while (g_server_running) {
 		int res = poll (&_pollfds[0], _pollfds.size (), -1);
 
 		if (res < 0) {
+			if (errno == EINTR) {
+				std::cout << "\nServer stopping..." << std::endl;
+				break;
+			}
 			throw std::runtime_error ("Poll failed.");
 		}
 		for (size_t i = 0; i < _pollfds.size ();) {
