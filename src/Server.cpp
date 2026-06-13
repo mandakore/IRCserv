@@ -132,16 +132,11 @@ void Server::ircLoop () {
 		if (res < 0) {
 			throw std::runtime_error ("Poll failed.");
 		}
-		for (size_t i = 0; i < _pollfds.size (); /* インクリメントは下 */) {
+		for (size_t i = 0; i < _pollfds.size ();) {
 			int clientFd = _pollfds[i].fd;
 			bool disconnected = false;
 
-			// エラーまたは切断検知の (POLLERR, POLLHUP, POLLNVAL)
-			if (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL)) {
-				disconnectClient (clientFd);
-				disconnected = true;
-			}
-			else if (_pollfds[i].revents & POLLIN) {
+			if (_pollfds[i].revents & POLLIN) {
 				if (clientFd == _serverFd) {
 					acceptNewClient ();
 				} else {
@@ -153,6 +148,10 @@ void Server::ircLoop () {
 			}
 			if (!disconnected && (_pollfds[i].revents & POLLOUT)) {
 				sendData (clientFd);
+			}
+			if (!disconnected && (_pollfds[i].revents & (POLLERR | POLLHUP | POLLNVAL))) {
+				disconnectClient (clientFd);
+				disconnected = true;
 			}
 			if (!disconnected) {
 				++i;
