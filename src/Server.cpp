@@ -22,7 +22,7 @@ void Server::setupSocket () {
 		ソケットの作成
 		AF_INET : IPv4
 		SOCK_STREAM : TCP
-	*/ 
+	*/
 	_serverFd = socket (AF_INET, SOCK_STREAM, 0);
 	if (_serverFd < 0) {
 		throw std::runtime_error ("Failed to create socket");
