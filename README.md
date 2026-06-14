@@ -165,4 +165,6 @@ irssi
 ## AI USAGE
 We used AI
 - To translate README we written in Japanese
+- To write Mermaid format Architecture figure.
 - Assist to understand new knowledge or functions from sites and books.
+
