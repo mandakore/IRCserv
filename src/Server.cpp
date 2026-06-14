@@ -92,6 +92,7 @@ void Server::receiveData (int clientFd) {
 
 #ifdef __linux__
 	ssize_t bytesRead = recv (clientFd, buffer, sizeof (buffer) - 1, MSG_DONTWAIT);
+	// DEBUG(bytesRead);
 #elif defined(__APPLE__)
 	ssize_t bytesRead = recv (clientFd, buffer, sizeof (buffer) - 1, 0);
 #endif
@@ -106,6 +107,8 @@ void Server::receiveData (int clientFd) {
 		disconnectClient (clientFd);
 		return;
 	} else {
+		buffer[bytesRead] = '\0';
+		// DEBUG(buffer);
 		_recvBuffers[clientFd].append (buffer, bytesRead);
 
 		// バッファ内\n確認
