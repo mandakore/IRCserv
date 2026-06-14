@@ -18,15 +18,19 @@ Server::~Server () {
 }
 
 void Server::setupSocket () {
-	// ソケットの作成
+	/*
+		ソケットの作成
+		AF_INET : IPv4
+		SOCK_STREAM : TCP
+	*/ 
 	_serverFd = socket (AF_INET, SOCK_STREAM, 0);
 	if (_serverFd < 0) {
 		throw std::runtime_error ("Failed to create socket");
 	}
 
-	// ソケットオプションの設定
-	// TIME_WAIT状態のポートを再利用することでstruct
-	// sockaddr_inを使わなくていいっぽい？←嘘。連続でサーバー立ち上げたいだけ。バインドで使ってるし
+	/*
+		サーバー連続立ち上げ
+	*/
 	int opt = 1;
 	if (setsockopt (_serverFd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof (opt)) < 0) {
 		throw std::runtime_error ("Failed to set socket options");
@@ -37,7 +41,6 @@ void Server::setupSocket () {
 		throw std::runtime_error ("Failed to set non-blocking mode");
 	}
 #endif
-	// バインド(調べる)
 	struct sockaddr_in serverAddr;
 	serverAddr.sin_family = AF_INET;
 	serverAddr.sin_addr.s_addr = INADDR_ANY;
@@ -47,12 +50,10 @@ void Server::setupSocket () {
 		throw std::runtime_error ("Failed to bind socket");
 	}
 
-	// リッスン(あとで調べる)
 	if (listen (_serverFd, SOMAXCONN) < 0) {
 		throw std::runtime_error ("Failed to listen on socket");
 	}
 
-	// poll構造体の初期化
 	struct pollfd pfd;
 	pfd.fd = _serverFd;
 	pfd.events = POLLIN;
@@ -88,7 +89,6 @@ void Server::acceptNewClient () {
 
 void Server::receiveData (int clientFd) {
 	char buffer[512];
-	// int clientFd = _pollfds[index].fd;
 
 #ifdef __linux__
 	ssize_t bytesRead = recv (clientFd, buffer, sizeof (buffer) - 1, MSG_DONTWAIT);
@@ -253,3 +253,10 @@ void Server::sendData (int clientFd) {
 		}
 	}
 }
+
+/*
+	ex)
+	POLLIN  = 0001
+	POLLOUT = 0100
+	events  = 0101
+*/
