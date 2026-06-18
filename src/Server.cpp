@@ -98,9 +98,9 @@ void Server::receiveData (int clientFd) {
 #endif
 
 	if (bytesRead < 0) {
-		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
-			return;
-		}
+		// if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
+		// 	return;
+		// }
 		disconnectClient (clientFd);
 		return;
 	} else if (bytesRead == 0) {
@@ -251,9 +251,9 @@ void Server::sendData (int clientFd) {
 			}
 		}
 	} else if (bytesSent < 0) {
-		if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
-			disconnectClient (clientFd);
-		}
+		// if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
+		disconnectClient (clientFd);
+		// }
 	}
 }
 
