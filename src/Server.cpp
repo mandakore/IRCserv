@@ -109,7 +109,10 @@ void Server::receiveData (int clientFd) {
 	} else {
 		buffer[bytesRead] = '\0';
 		// DEBUG(buffer);
-		_recvBuffers[clientFd].append (buffer, bytesRead);
+		// Ctrl+D (0x04) を除去する
+		std::string chunk (buffer, bytesRead);
+		chunk.erase (std::remove (chunk.begin (), chunk.end (), '\x04'), chunk.end ());
+		_recvBuffers[clientFd].append (chunk);
 
 		// バッファ内\n確認
 		size_t pos;
