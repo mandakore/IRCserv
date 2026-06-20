@@ -98,9 +98,9 @@ void Server::receiveData (int clientFd) {
 #endif
 
 	if (bytesRead < 0) {
-		if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
-			return;
-		}
+		// if (errno == EAGAIN || errno == EWOULDBLOCK || errno == EINTR) {
+		// 	return;
+		// }
 		disconnectClient (clientFd);
 		return;
 	} else if (bytesRead == 0) {
@@ -109,7 +109,17 @@ void Server::receiveData (int clientFd) {
 	} else {
 		buffer[bytesRead] = '\0';
 		// DEBUG(buffer);
-		_recvBuffers[clientFd].append (buffer, bytesRead);
+		// \r \n 以外の制御文字 (0x00-0x1F) を除去する
+		std::string chunk (buffer, bytesRead);
+		for (std::string::iterator it = chunk.begin (); it != chunk.end ();) {
+			unsigned char c = static_cast<unsigned char> (*it);
+			if (c < 0x20 && c != '\r' && c != '\n') {
+				it = chunk.erase (it);
+			} else {
+				++it;
+			}
+		}
+		_recvBuffers[clientFd].append (chunk);
 
 		// バッファ内\n確認
 		size_t pos;
@@ -135,10 +145,10 @@ void Server::ircLoop () {
 		int res = poll (&_pollfds[0], _pollfds.size (), -1);
 
 		if (res < 0) {
-			if (errno == EINTR) {
-				std::cout << "\nServer stopping..." << std::endl;
-				break;
-			}
+			// if (errno == EINTR) {
+			// 	std::cout << "\nServer stopping..." << std::endl;
+			// 	break;
+			// }
 			throw std::runtime_error ("Poll failed.");
 		}
 		for (size_t i = 0; i < _pollfds.size ();) {
@@ -251,9 +261,9 @@ void Server::sendData (int clientFd) {
 			}
 		}
 	} else if (bytesSent < 0) {
-		if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
-			disconnectClient (clientFd);
-		}
+		// if (errno != EAGAIN && errno != EWOULDBLOCK && errno != EINTR) {
+		disconnectClient (clientFd);
+		// }
 	}
 }
 
