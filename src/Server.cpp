@@ -145,10 +145,10 @@ void Server::ircLoop () {
 		int res = poll (&_pollfds[0], _pollfds.size (), -1);
 
 		if (res < 0) {
-			if (errno == EINTR) {
-				std::cout << "\nServer stopping..." << std::endl;
-				break;
-			}
+			// if (errno == EINTR) {
+			// 	std::cout << "\nServer stopping..." << std::endl;
+			// 	break;
+			// }
 			throw std::runtime_error ("Poll failed.");
 		}
 		for (size_t i = 0; i < _pollfds.size ();) {
