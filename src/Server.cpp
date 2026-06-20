@@ -109,9 +109,16 @@ void Server::receiveData (int clientFd) {
 	} else {
 		buffer[bytesRead] = '\0';
 		// DEBUG(buffer);
-		// Ctrl+D (0x04) を除去する
+		// \r \n 以外の制御文字 (0x00-0x1F) を除去する
 		std::string chunk (buffer, bytesRead);
-		chunk.erase (std::remove (chunk.begin (), chunk.end (), '\x04'), chunk.end ());
+		for (std::string::iterator it = chunk.begin (); it != chunk.end ();) {
+			unsigned char c = static_cast<unsigned char> (*it);
+			if (c < 0x20 && c != '\r' && c != '\n') {
+				it = chunk.erase (it);
+			} else {
+				++it;
+			}
+		}
 		_recvBuffers[clientFd].append (chunk);
 
 		// バッファ内\n確認
